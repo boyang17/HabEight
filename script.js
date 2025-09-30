@@ -1,5 +1,3 @@
-// TODO: Add daily habits (e.g., Drink Water, Read, Workout)
-// TODO: Track habit completion with checkboxes (Local Storage)
 // TODO: Streak counter for consistency
 // TODO: Simple dashboard with progress visualization
 // TODO: Responsive layout with dark mode option
@@ -24,54 +22,31 @@ const nextDateBtn = document.getElementById("next-date-btn");
       habit: "run",
       streak: 2,
       record: {
-        "9/22/2025": true,
-        "9/23/2025": true,
+        "2025-9-22": true,
+        "2025-9-23": true,
       },
     },
     ...
   ]
  */
 let habits = JSON.parse(localStorage.getItem("habits")) || [];
+
+let currentDate = new Date();
 let today = new Date();
 
-// Temporary hard coeded habits for testing
-// habits = [
-//   {
-//     habit: "run",
-//     streak: 2,
-//     record: {
-//       "9/22/2025": true,
-//       "9/23/2025": true,
-//     },
-//   },
-//   {
-//     habit: "read",
-//     streak: 0,
-//     record: {
-//       "9/22/2025": false,
-//       "9/23/2025": false,
-//     },
-//   },
-//   {
-//     habit: "meditate",
-//     streak: 2,
-//     record: {
-//       "9/22/2025": true,
-//       "9/23/2025": true,
-//     },
-//   },
-// ];
-
 // Initialization
-displayDate(today);
-displayHabits(today);
+dateDisplaying.setAttribute("max", formatDate(today));
+displayDate(currentDate);
+displayHabits(currentDate);
+sortDates();
+disableNextBtn();
 
 /**
  * Displays the date on top of the habits
  * @param {Date} date
  */
 function displayDate(date) {
-  dateDisplaying.textContent = formatDate(date);
+  dateDisplaying.value = formatDate(date);
 }
 
 /**
@@ -80,11 +55,11 @@ function displayDate(date) {
  * @returns {string} formatted date
  */
 function formatDate(date) {
-  const month = String(date.getMonth() + 1);
-  const day = String(date.getDate());
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
   const year = date.getFullYear();
 
-  const formattedDate = `${month}/${day}/${year}`;
+  const formattedDate = `${year}-${month}-${day}`;
   return formattedDate;
 }
 
@@ -129,18 +104,43 @@ function createHabitCheckbox(id, name, isChecked = false) {
   habitCheckbox.checked = isChecked;
 
   habitCheckbox.addEventListener("change", () => {
-    updateHabits(habitCheckbox, today);
+    updateHabits(habitCheckbox, currentDate);
+    calculateCurrentStreak();
   });
 
   const habitLabel = document.createElement("label");
   habitLabel.htmlFor = id;
   habitLabel.textContent = name;
 
+  const deleteHabitBtn = document.createElement("button");
+  deleteHabitBtn.id = "delete-habit-btn";
+  deleteHabitBtn.textContent = "Delete";
+
+  deleteHabitBtn.addEventListener("click", () => {
+    deleteHabit(name);
+  });
+
   const habitItem = document.createElement("li");
   habitItem.appendChild(habitCheckbox);
   habitItem.appendChild(habitLabel);
+  habitItem.appendChild(deleteHabitBtn);
 
   return habitItem;
+}
+
+/**
+ * Searchs the habit in the habits list to delete
+ * @param {string} habit the habit to delete
+ */
+function deleteHabit(habit) {
+  habits.forEach((h, i) => {
+    if (h["habit"] === habit) {
+      habits.splice(i, 1);
+    }
+  });
+
+  localStorage.setItem("habits", JSON.stringify(habits));
+  displayHabits(currentDate);
 }
 
 /**
@@ -162,39 +162,165 @@ function updateHabits(habitCheckbox, date) {
   }
 }
 
-// Add a click listener to add a habit to "today" and redisplay the habits with the newly added
+/**
+ * It records the habits in between the select date and today
+ * as not finished
+ */
+function fillHabits() {
+  let dateToAdd = new Date(currentDate);
+  let days = today.getDate() - currentDate.getDate();
+
+  if (habits.length === 0) {
+    return;
+  }
+
+  // TODO: Fix
+  for (let i = 0; i < days; i++) {
+    dateToAdd.setDate(dateToAdd.getDate() + 1);
+    habits.find((h) => h.habit === habitToAdd.value)["record"][
+      formatDate(dateToAdd)
+    ] = false;
+  }
+
+  localStorage.setItem("habits", JSON.stringify(habits));
+}
+
+// Add a click listener to add a habit to "currentDate" and all the habit in between the "currentDate" and "today"
+// and redisplay the habits with the newly added
 addHabitBtn.addEventListener("click", () => {
-  addHabit(today);
-  displayHabits(today);
+  addHabit(currentDate);
+  fillHabits();
+  sortDates();
+  displayHabits(currentDate);
+  habitToAdd.value = "";
 });
 
 /**
- * Adds a new habit to the list of habbits
+ * Adds a new habit to the list of habbits. Alerts if user tries to add repeated habit
  * @param {Date} date the date habit is started to get tracked
  */
 function addHabit(date) {
   let formattedDate = formatDate(date);
   let inputHabit = habitToAdd.value.trim();
+
+  if (!inputHabit) {
+    alert("Please enter a habit!");
+    return;
+  }
+
+  let alreadyExists = habits.some((h) => h.habit === inputHabit);
+
+  if (alreadyExists) {
+    alert("Cannot add repeated habit!");
+    return;
+  }
+
   let habit = {
     habit: inputHabit,
     streak: 0,
     record: { [formattedDate]: false },
   };
+
   habits.push(habit);
   localStorage.setItem("habits", JSON.stringify(habits));
-  habitToAdd.value = "";
 }
 
+// Adds a click listner so the user can go to the previous date
 prevDateBtn.addEventListener("click", () => {
-  let newDate = displayTheDayBefore();
+  let newDate = differentDate("prev");
 
-  today = newDate;
+  currentDate = newDate;
   displayDate(newDate);
   displayHabits(newDate);
+  sortDates();
+  disableNextBtn();
 });
 
-function displayTheDayBefore() {
-  let currentDateObject = new Date(dateDisplaying.textContent);
-  currentDateObject.setDate(currentDateObject.getDate() - 1);
+// Adds a click listner so the user can go to the next date
+nextDateBtn.addEventListener("click", () => {
+  let newDate = differentDate("next");
+
+  currentDate = newDate;
+  displayDate(newDate);
+  displayHabits(newDate);
+  sortDates();
+  disableNextBtn();
+});
+
+dateDisplaying.addEventListener("change", () => {
+  let newDate = parseDateInput(dateDisplaying.value);
+
+  currentDate = newDate;
+  displayHabits(newDate);
+  fillHabits();
+  sortDates();
+  disableNextBtn();
+});
+
+/**
+ * Helper function that correctly changes the date string to Date
+ * @param {String} date input date string
+ * @returns {Date} the date in Date format
+ */
+function parseDateInput(date) {
+  const [year, month, day] = date.split("-").map(Number);
+  return new Date(year, month - 1, day);
+}
+
+/**
+ * Goes to the day before or after user's display date
+ * @param {string} when goes to the previous or next date
+ * @returns the new Date()
+ */
+function differentDate(when) {
+  let currentDateObject = new Date(currentDate);
+  if (when === "prev") {
+    currentDateObject.setDate(currentDateObject.getDate() - 1);
+  } else if (when === "next") {
+    currentDateObject.setDate(currentDateObject.getDate() + 1);
+  }
+
   return currentDateObject;
+}
+
+/**
+ * Disables the next button so the user cannot time travel into the future
+ */
+function disableNextBtn() {
+  if (formatDate(currentDate) === formatDate(today)) {
+    nextDateBtn.disabled = true;
+  } else {
+    nextDateBtn.disabled = false;
+  }
+}
+
+/**
+ * Sorts the dates of the tracking habits in chronological order
+ * newest date is the first entry
+ */
+function sortDates() {
+  habits.forEach((h) => {
+    const dates = Object.entries(h.record);
+    dates.sort((a, b) => new Date(b[0]) - new Date(a[0]));
+    h.record = Object.fromEntries(dates);
+  });
+  calculateCurrentStreak();
+  localStorage.setItem("habits", JSON.stringify(habits));
+}
+
+/**
+ * Calculates the current streak for each habits
+ */
+function calculateCurrentStreak() {
+  habits.forEach((h) => {
+    h.streak = 0;
+    let i = 0;
+    let dateState = h.record[Object.keys(h.record)[i]];
+    while (dateState === true) {
+      h.streak++;
+      i++;
+      dateState = h.record[Object.keys(h.record)[i]];
+    }
+    localStorage.setItem("habits", JSON.stringify(habits));
+  });
 }
