@@ -168,18 +168,19 @@ function updateHabits(habitCheckbox, date) {
  */
 function fillHabits() {
   let dateToAdd = new Date(currentDate);
-  let days = today.getDate() - currentDate.getDate();
+  let days = Math.floor((today - currentDate) / (1000 * 60 * 60 * 24));
 
   if (habits.length === 0) {
     return;
   }
 
-  // TODO: Fix
   for (let i = 0; i < days; i++) {
     dateToAdd.setDate(dateToAdd.getDate() + 1);
-    habits.find((h) => h.habit === habitToAdd.value)["record"][
-      formatDate(dateToAdd)
-    ] = false;
+    habits.forEach((habit) => {
+      if (!(formatDate(dateToAdd) in habit.record)) {
+        habit["record"][formatDate(dateToAdd)] = false;
+      }
+    });
   }
 
   localStorage.setItem("habits", JSON.stringify(habits));
