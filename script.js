@@ -55,7 +55,7 @@ sortDates();
 disableNextBtn();
 disableAddHabitBtn();
 spawnHabitGraphBtn();
-disableGraphBtn(graphIndex - 1);
+disableGraphBtn(graphIndex);
 showHabitGraph(graphIndex);
 
 /**
@@ -141,14 +141,16 @@ function createHabitCheckbox(id, name, isChecked = false) {
   deleteHabitBtn.addEventListener("click", () => {
     deleteHabit(name);
     disableAddHabitBtn();
+    spawnHabitGraphBtn();
     if (habits.length > 0) {
-      spawnHabitGraphBtn();
-      graphIndex = 0;
-      localStorage.setItem("graphIndex", graphIndex);
       disableGraphBtn(graphIndex);
-      showHabitGraph(1);
+      if (graphIndex > habits.length) {
+        graphIndex -= 1;
+        localStorage.setItem("graphIndex", graphIndex);
+        showHabitGraph(graphIndex);
+        disableGraphBtn(graphIndex);
+      }
     } else {
-      spawnHabitGraphBtn();
       squares.innerHTML = "";
     }
   });
@@ -231,7 +233,7 @@ addHabitBtn.addEventListener("click", () => {
   habitToAdd.value = "";
   disableAddHabitBtn();
   spawnHabitGraphBtn();
-  disableGraphBtn(graphIndex - 1);
+  disableGraphBtn(graphIndex);
   showHabitGraph(graphIndex);
 });
 
@@ -410,11 +412,11 @@ function spawnHabitGraphBtn() {
 function disableGraphBtn(index) {
   const allBtns = graphBtns.querySelectorAll("button");
 
-  if (allBtns.length === 0) {
+  if (allBtns.length === 0 || index < 0 || index > allBtns.length) {
     return;
   }
 
-  allBtns[index].disabled = true;
+  allBtns[index - 1].disabled = true;
 }
 
 /**
@@ -422,11 +424,11 @@ function disableGraphBtn(index) {
  * @param {integer} habitIndex which habit to shown indicated by the index
  */
 function showHabitGraph(habitIndex) {
+  squares.innerHTML = "";
+
   if (habits.length === 0) {
     return;
   }
-
-  squares.innerHTML = "";
 
   const dates = Object.keys(habits[habitIndex - 1].record);
   let recordLength = Object.keys(habits[habitIndex - 1].record).length;
