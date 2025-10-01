@@ -13,6 +13,8 @@ const addHabitBtn = document.getElementById("add-habit-button");
 const habitToAdd = document.getElementById("habit-to-add");
 const prevDateBtn = document.getElementById("prev-date-btn");
 const nextDateBtn = document.getElementById("next-date-btn");
+const graphBtns = document.getElementById("graph-btns");
+const squares = document.querySelector(".squares");
 
 // State and Data
 /**
@@ -30,9 +32,20 @@ const nextDateBtn = document.getElementById("next-date-btn");
   ]
  */
 let habits = JSON.parse(localStorage.getItem("habits")) || [];
+let graphIndex = parseInt(localStorage.getItem("graphIndex"), 10) || 1;
 
 let currentDate = new Date();
 let today = new Date();
+const habitColors = {
+  1: "#f08080",
+  2: "#7bc96f",
+  3: "#87cefa",
+  4: "#9370db",
+  5: "#ff7f50",
+  6: "#0044cc",
+  7: "#ffd700",
+  8: "#ff69b4",
+};
 
 // Initialization
 dateDisplaying.setAttribute("max", formatDate(today));
@@ -40,6 +53,10 @@ displayDate(currentDate);
 displayHabits(currentDate);
 sortDates();
 disableNextBtn();
+disableAddHabitBtn();
+spawnHabitGraphBtn();
+disableGraphBtn(graphIndex - 1);
+showHabitGraph(graphIndex);
 
 /**
  * Displays the date on top of the habits
@@ -102,15 +119,20 @@ function createHabitCheckbox(id, name, isChecked = false) {
   habitCheckbox.id = id;
   habitCheckbox.name = name;
   habitCheckbox.checked = isChecked;
+  habitCheckbox.style = `width: 15px; height: 15px;   ; display: inline-block; \
+     vertical-align: middle; border-radius: 1px; \ margin-right: 0px;
+     accent-color: ${habitColors[habits.findIndex((h) => h.habit === id) + 1]}`;
 
   habitCheckbox.addEventListener("change", () => {
     updateHabits(habitCheckbox, currentDate);
     calculateCurrentStreak();
+    showHabitGraph(graphIndex);
   });
 
   const habitLabel = document.createElement("label");
   habitLabel.htmlFor = id;
   habitLabel.textContent = name;
+  habitLabel.style = "margin: 5px;";
 
   const deleteHabitBtn = document.createElement("button");
   deleteHabitBtn.id = "delete-habit-btn";
@@ -118,9 +140,22 @@ function createHabitCheckbox(id, name, isChecked = false) {
 
   deleteHabitBtn.addEventListener("click", () => {
     deleteHabit(name);
+    disableAddHabitBtn();
+    if (habits.length > 0) {
+      spawnHabitGraphBtn();
+      graphIndex = 0;
+      localStorage.setItem("graphIndex", graphIndex);
+      disableGraphBtn(graphIndex);
+      showHabitGraph(1);
+    } else {
+      spawnHabitGraphBtn();
+      squares.innerHTML = "";
+    }
   });
 
   const habitItem = document.createElement("li");
+  habitItem.style.display = "flex";
+  habitItem.style.alignItems = "center";
   habitItem.appendChild(habitCheckbox);
   habitItem.appendChild(habitLabel);
   habitItem.appendChild(deleteHabitBtn);
@@ -194,6 +229,10 @@ addHabitBtn.addEventListener("click", () => {
   sortDates();
   displayHabits(currentDate);
   habitToAdd.value = "";
+  disableAddHabitBtn();
+  spawnHabitGraphBtn();
+  disableGraphBtn(graphIndex - 1);
+  showHabitGraph(graphIndex);
 });
 
 /**
@@ -235,6 +274,7 @@ prevDateBtn.addEventListener("click", () => {
   displayHabits(newDate);
   sortDates();
   disableNextBtn();
+  showHabitGraph(graphIndex);
 });
 
 // Adds a click listner so the user can go to the next date
@@ -246,8 +286,10 @@ nextDateBtn.addEventListener("click", () => {
   displayHabits(newDate);
   sortDates();
   disableNextBtn();
+  showHabitGraph(graphIndex);
 });
 
+// The user can go to any date in the past
 dateDisplaying.addEventListener("change", () => {
   let newDate = parseDateInput(dateDisplaying.value);
 
@@ -256,6 +298,7 @@ dateDisplaying.addEventListener("change", () => {
   fillHabits();
   sortDates();
   disableNextBtn();
+  showHabitGraph(graphIndex);
 });
 
 /**
@@ -296,6 +339,17 @@ function disableNextBtn() {
 }
 
 /**
+ * Disables the add habit btn if there are 8 habits.
+ */
+function disableAddHabitBtn() {
+  if (habits.length >= 8) {
+    addHabitBtn.disabled = true;
+  } else {
+    addHabitBtn.disabled = false;
+  }
+}
+
+/**
  * Sorts the dates of the tracking habits in chronological order
  * newest date is the first entry
  */
@@ -324,4 +378,71 @@ function calculateCurrentStreak() {
     }
     localStorage.setItem("habits", JSON.stringify(habits));
   });
+}
+
+/**
+ * Create buttons for each habit to show the corresponding progress graph
+ */
+function spawnHabitGraphBtn() {
+  graphBtns.innerHTML = "";
+
+  for (let i = 0; i < habits.length; i++) {
+    const graphBtn = document.createElement("button");
+    graphBtn.textContent = habits[i]["habit"];
+
+    graphBtn.addEventListener("click", () => {
+      const allBtns = graphBtns.querySelectorAll("button");
+      allBtns.forEach((btn) => {
+        btn.disabled = false;
+      });
+
+      graphIndex = i + 1;
+      localStorage.setItem("graphIndex", graphIndex);
+
+      showHabitGraph(graphIndex);
+      graphBtn.disabled = true;
+    });
+
+    graphBtns.appendChild(graphBtn);
+  }
+}
+
+function disableGraphBtn(index) {
+  const allBtns = graphBtns.querySelectorAll("button");
+
+  if (allBtns.length === 0) {
+    return;
+  }
+
+  allBtns[index].disabled = true;
+}
+
+/**
+ * Shows the progress graph of each habit github activity style
+ * @param {integer} habitIndex which habit to shown indicated by the index
+ */
+function showHabitGraph(habitIndex) {
+  if (habits.length === 0) {
+    return;
+  }
+
+  squares.innerHTML = "";
+
+  const dates = Object.keys(habits[habitIndex - 1].record);
+  let recordLength = Object.keys(habits[habitIndex - 1].record).length;
+  // Max squares shown: 60
+  let startIndex = Math.min(recordLength - 1, 59);
+  let level = 0;
+
+  for (let i = startIndex; i >= 0; i--) {
+    if (habits[habitIndex - 1].record[dates[i]] === true) {
+      level = habitIndex;
+    } else {
+      level = 0;
+    }
+    squares.insertAdjacentHTML(
+      "beforeend",
+      `<li data-level="${level}" title="${dates[i]}"></li>`
+    );
+  }
 }

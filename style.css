@@ -1,3 +1,78 @@
+:root {
+  --square-size: 15px;
+  --square-gap: 5px;
+  --habit-1: #f08080;
+  --habit-2: #7bc96f;
+  --habit-3: #87cefa;
+  --habit-4: #9370db;
+  --habit-5: #ff7f50;
+  --habit-6: #0044cc;
+  --habit-7: #ffd700;
+  --habit-8: #ff69b4;
+}
+
+.squares {
+  grid-auto-flow: column;
+  grid-auto-columns: var(--square-size);
+  display: grid;
+  grid-gap: var(--square-gap);
+  grid-template-rows: repeat(5, var(--square-size));
+  padding: 0px;
+  padding-left: 0px;
+}
+
 body {
   font-family: Arial, Helvetica, sans-serif;
+}
+
+.graph {
+  width: 235px;
+  display: inline-block;
+  padding: 3px;
+  border: 1px #e1e4e8 solid;
+  border-radius: 10px;
+  margin: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+ul {
+  list-style-type: none;
+}
+
+.squares li {
+  background-color: #ebedf0;
+  border-radius: 1px;
+}
+
+.squares li[data-level="1"] {
+  background-color: var(--habit-1);
+}
+
+.squares li[data-level="2"] {
+  background-color: var(--habit-2);
+}
+
+.squares li[data-level="3"] {
+  background-color: var(--habit-3);
+}
+
+.squares li[data-level="4"] {
+  background-color: var(--habit-4);
+}
+
+.squares li[data-level="5"] {
+  background-color: var(--habit-5);
+}
+
+.squares li[data-level="6"] {
+  background-color: var(--habit-6);
+}
+
+.squares li[data-level="7"] {
+  background-color: var(--habit-7);
+}
+
+.squares li[data-level="8"] {
+  background-color: var(--habit-8);
 }
