@@ -509,12 +509,16 @@ function showHabitGraph(habitIndex) {
   }
 }
 
+/**
+ * Sets the theme of the webpage
+ */
 function setTheme() {
   if (theme === "dark") {
     document.body.classList.add("dark");
   }
 }
 
+// Toggles the webpage between dark and light mode
 toggleThemeBtn.addEventListener("click", () => {
   document.body.classList.toggle("dark");
 
