@@ -27,6 +27,29 @@ body {
   zoom: 1.5;
 }
 
+body.dark {
+  --background-color: #191c1f;
+  --text-color: #f1f1f1;
+  --border-color: #f1f1f1;
+  --button-bg: #1e1e1e;
+  --button-text: #f1f1f1;
+  --input-text: #f1f1f1;
+  --today-btn-border: #3399ff;
+  --progress-dark: #a0a0a0;
+}
+
+body {
+  background-color: var(--background-color, white);
+  color: var(--text-color, black);
+}
+
+input,
+button {
+  background-color: var(--background-color, white);
+  color: var(--input-text, black);
+  border-color: var(--border-color, black);
+}
+
 header {
   display: flex;
   flex-direction: column;
@@ -34,7 +57,7 @@ header {
   top: 10px;
   right: 10px;
   gap: 5px;
-  text-align: right;
+  align-items: flex-end;
 }
 
 header p {
@@ -42,23 +65,33 @@ header p {
   padding: 0;
 }
 
+#toggle-theme-btn {
+  margin: 0;
+  padding: 0;
+  font-size: 25px;
+  color: var(--text-color, black);
+  zoom: 1.5;
+}
+
 header a {
   margin: 0;
   padding: 0;
   font-size: 25px;
-  color: black;
+  color: var(--text-color, black);
 }
 
 .container {
   display: flex;
-  gap: 80px;
+  justify-content: center;
+  align-items: center;
+  gap: 45px;
 }
 
 #prev-date-btn,
 #next-date-btn,
 #delete-habit-btn,
 #add-habit-button,
-#today-btn {
+#toggle-theme-btn {
   background-color: transparent;
   border: none;
   font-size: 16px;
@@ -66,16 +99,11 @@ header a {
 }
 
 #today-btn {
-  font-size: 14px;
-  padding: 0;
-}
-
-#today-btn {
-  background-color: #fff;
-  border: 2px solid #422800;
+  background-color: var(--background-color, #fff);
+  border: 2px solid var(--today-btn-border, #422800);
   border-radius: 30px;
-  box-shadow: #422800 4px 4px 0 0;
-  color: #422800;
+  box-shadow: var(--today-btn-border, #422800) 4px 4px 0 0;
+  color: var(--today-btn-border, #422800);
   cursor: pointer;
   display: inline-block;
   font-weight: 600;
@@ -87,7 +115,7 @@ header a {
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;
-  zoom: 0.5;
+  zoom: 0.45;
 }
 
 #today-btn:hover {
@@ -121,7 +149,9 @@ header a {
 }
 
 #date-displaying {
-  font-size: 0.9rem;
+  outline: none;
+  border: none;
+  font-size: 1.5rem;
 }
 
 .input-habit {
@@ -147,14 +177,14 @@ header a {
   font-size: 0.9rem;
   padding-left: 5px;
   border: none;
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid var(--border-color, black);
   outline: none;
   user-select: text;
-  caret-color: black;
+  caret-color: var(white, black);
 }
 
 #graph-btn {
-  background-color: white;
+  background-color: var(--background-color, white);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -167,7 +197,7 @@ header a {
 }
 
 #graph-btn:disabled {
-  background-color: #fbeee0; 
+  background-color: #fbeee0;
 }
 
 .squares {
@@ -184,12 +214,26 @@ header a {
   width: 235px;
   display: inline-block;
   padding: 3px;
-  border: 1px black solid;
+  border: 1px var(--text-color, black) solid;
   border-radius: 10px;
-  margin: 20px;
   padding-left: 20px;
   padding-right: 20px;
   padding-top: 10px;
+}
+
+.graph-stat {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 30px;
+  gap: 10px;
+}
+
+#days-tracked {
+  display: flex;
+  justify-content: center;
+  text-align: right;
+  font-size: 0.65rem;
 }
 
 ul {
@@ -197,7 +241,7 @@ ul {
 }
 
 .squares li {
-  background-color: #ebedf0;
+  background-color: var(--progress-dark, #ebedf0);
   border-radius: 1px;
 }
 
@@ -231,4 +275,27 @@ ul {
 
 .squares li[data-level="8"] {
   background-color: var(--habit-8);
+}
+
+@media (max-width: 768px) {
+  body {
+    zoom: 1.1;
+  }
+
+  .container {
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+
+  header {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    gap: 20px;
+    align-items: flex-end;
+    zoom: 0.8;
+  }
 }

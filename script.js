@@ -1,7 +1,5 @@
-// TODO: Responsive layout with dark mode option
-
 /**
- * Daily Habit Tracker
+ * HabEight
  */
 
 // DOM Elements
@@ -16,6 +14,8 @@ const squares = document.querySelector(".squares");
 const todayBtn = document.getElementById("today-btn");
 const dashboard = document.getElementById("dashboard");
 const displayStreak = document.getElementById("display-streak");
+const daysTracked = document.getElementById("days-tracked");
+const toggleThemeBtn = document.getElementById("toggle-theme-btn");
 
 // State and Data
 /**
@@ -37,6 +37,7 @@ let graphIndex = parseInt(localStorage.getItem("graphIndex"), 10) || 1;
 let currentDate = localStorage.getItem("currentDate")
   ? new Date(JSON.parse(localStorage.getItem("currentDate")))
   : new Date();
+let theme = localStorage.getItem("theme");
 
 let today = new Date();
 const habitColors = {
@@ -57,6 +58,7 @@ init();
  * Init and load everything at the start
  */
 function init() {
+  setTheme();
   dateDisplaying.setAttribute("max", formatDate(today));
   displayDate(currentDate);
   displayHabits(currentDate);
@@ -491,6 +493,7 @@ function showHabitGraph(habitIndex) {
   let recordLength = Object.keys(habits[habitIndex - 1].record).length;
   // Max squares shown: 60
   let startIndex = Math.min(recordLength - 1, 59);
+  daysTracked.textContent = `${startIndex + 1} days`;
   let level = 0;
 
   for (let i = startIndex; i >= 0; i--) {
@@ -505,3 +508,19 @@ function showHabitGraph(habitIndex) {
     );
   }
 }
+
+function setTheme() {
+  if (theme === "dark") {
+    document.body.classList.add("dark");
+  }
+}
+
+toggleThemeBtn.addEventListener("click", () => {
+  document.body.classList.toggle("dark");
+
+  if (document.body.classList.contains("dark")) {
+    localStorage.setItem("theme", "dark");
+  } else {
+    localStorage.setItem("theme", "light");
+  }
+});
