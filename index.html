@@ -5,31 +5,56 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Daily Habit Tracker</title>
     <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
   </head>
   <body>
-    <div id="todays-habits">
-      <div>
-        <button id="prev-date-btn">prev</button>
-        <!-- <h2 id="date-displaying"></h2> -->
-        <input type="date" id="date-displaying" />
-        <button id="next-date-btn">next</button>
+    <header>
+      <p>HabEight</p>
+      <a
+        href="https://github.com/boyang17/daily-habit-tracker"
+        target="_blank"
+        title="Source code"
+      >
+        <i class="fa fa-github"></i>
+      </a>
+    </header>
+
+    <div class="container">
+      <div id="todays-habits">
+        <div class="date-container">
+          <button id="prev-date-btn" title="prev">
+            <i class="fa fa-arrow-left" aria-hidden="true"></i>
+          </button>
+          <input type="date" id="date-displaying" />
+          <button id="next-date-btn" title="next">
+            <i class="fa fa-arrow-right" aria-hidden="true"></i>
+          </button>
+          <button id="today-btn" role="button">Today</button>
+        </div>
+
+        <ul id="habit-list"></ul>
+        <div class="input-habit">
+          <input
+            type="text"
+            name="habit-to-add"
+            id="habit-to-add"
+            placeholder="A daily habit to track"
+          />
+          <button id="add-habit-button" title="add">
+            <i class="fa fa-plus" aria-hidden="true"></i>
+          </button>
+        </div>
       </div>
 
-      <ul id="habit-list"></ul>
-      <input
-        type="text"
-        name="habit-to-add"
-        id="habit-to-add"
-        placeholder="A daily habit to track"
-      />
-      <button id="add-habit-button">Add</button>
-    </div>
-
-    <div id="graph-btns"></div>
-
-    <div id="dashboard">
-      <div class="graph">
-        <ul class="squares"></ul>
+      <div id="dashboard">
+        <h2 id="display-streak"></h2>
+        <div class="graph">
+          <div id="graph-btns"></div>
+          <ul class="squares"></ul>
+        </div>
       </div>
     </div>
 

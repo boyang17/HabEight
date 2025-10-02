@@ -1,5 +1,3 @@
-// TODO: Streak counter for consistency
-// TODO: Simple dashboard with progress visualization
 // TODO: Responsive layout with dark mode option
 
 /**
@@ -15,6 +13,9 @@ const prevDateBtn = document.getElementById("prev-date-btn");
 const nextDateBtn = document.getElementById("next-date-btn");
 const graphBtns = document.getElementById("graph-btns");
 const squares = document.querySelector(".squares");
+const todayBtn = document.getElementById("today-btn");
+const dashboard = document.getElementById("dashboard");
+const displayStreak = document.getElementById("display-streak");
 
 // State and Data
 /**
@@ -33,8 +34,10 @@ const squares = document.querySelector(".squares");
  */
 let habits = JSON.parse(localStorage.getItem("habits")) || [];
 let graphIndex = parseInt(localStorage.getItem("graphIndex"), 10) || 1;
+let currentDate = localStorage.getItem("currentDate")
+  ? new Date(JSON.parse(localStorage.getItem("currentDate")))
+  : new Date();
 
-let currentDate = new Date();
 let today = new Date();
 const habitColors = {
   1: "#f08080",
@@ -48,15 +51,30 @@ const habitColors = {
 };
 
 // Initialization
-dateDisplaying.setAttribute("max", formatDate(today));
-displayDate(currentDate);
-displayHabits(currentDate);
-sortDates();
-disableNextBtn();
-disableAddHabitBtn();
-spawnHabitGraphBtn();
-disableGraphBtn(graphIndex);
-showHabitGraph(graphIndex);
+init();
+
+/**
+ * Init and load everything at the start
+ */
+function init() {
+  dateDisplaying.setAttribute("max", formatDate(today));
+  displayDate(currentDate);
+  displayHabits(currentDate);
+  sortDates();
+  disableNextBtn();
+  disableAddHabitBtn();
+  spawnHabitGraphBtn();
+  disableGraphBtn(graphIndex);
+  showCurrentStreak(graphIndex);
+  showHabitGraph(graphIndex);
+}
+
+// Jumps to today's date
+todayBtn.addEventListener("click", () => {
+  currentDate = today;
+  localStorage.setItem("currentDate", JSON.stringify(currentDate));
+  init();
+});
 
 /**
  * Displays the date on top of the habits
@@ -127,6 +145,7 @@ function createHabitCheckbox(id, name, isChecked = false) {
     updateHabits(habitCheckbox, currentDate);
     calculateCurrentStreak();
     showHabitGraph(graphIndex);
+    showCurrentStreak(graphIndex);
   });
 
   const habitLabel = document.createElement("label");
@@ -136,7 +155,8 @@ function createHabitCheckbox(id, name, isChecked = false) {
 
   const deleteHabitBtn = document.createElement("button");
   deleteHabitBtn.id = "delete-habit-btn";
-  deleteHabitBtn.textContent = "Delete";
+  deleteHabitBtn.title = "delete";
+  deleteHabitBtn.innerHTML = `<i class="fa fa-trash-o" aria-hidden="true"></i>`;
 
   deleteHabitBtn.addEventListener("click", () => {
     deleteHabit(name);
@@ -149,13 +169,16 @@ function createHabitCheckbox(id, name, isChecked = false) {
         localStorage.setItem("graphIndex", graphIndex);
         showHabitGraph(graphIndex);
         disableGraphBtn(graphIndex);
+        showCurrentStreak(graphIndex);
       }
     } else {
+      showCurrentStreak(graphIndex);
       squares.innerHTML = "";
     }
   });
 
   const habitItem = document.createElement("li");
+  habitItem.id = "habit-item";
   habitItem.style.display = "flex";
   habitItem.style.alignItems = "center";
   habitItem.appendChild(habitCheckbox);
@@ -235,6 +258,7 @@ addHabitBtn.addEventListener("click", () => {
   spawnHabitGraphBtn();
   disableGraphBtn(graphIndex);
   showHabitGraph(graphIndex);
+  showCurrentStreak(graphIndex);
 });
 
 /**
@@ -277,6 +301,8 @@ prevDateBtn.addEventListener("click", () => {
   sortDates();
   disableNextBtn();
   showHabitGraph(graphIndex);
+
+  localStorage.setItem("currentDate", JSON.stringify(newDate));
 });
 
 // Adds a click listner so the user can go to the next date
@@ -289,6 +315,8 @@ nextDateBtn.addEventListener("click", () => {
   sortDates();
   disableNextBtn();
   showHabitGraph(graphIndex);
+
+  localStorage.setItem("currentDate", JSON.stringify(newDate));
 });
 
 // The user can go to any date in the past
@@ -301,6 +329,8 @@ dateDisplaying.addEventListener("change", () => {
   sortDates();
   disableNextBtn();
   showHabitGraph(graphIndex);
+
+  localStorage.setItem("currentDate", JSON.stringify(newDate));
 });
 
 /**
@@ -378,8 +408,22 @@ function calculateCurrentStreak() {
       i++;
       dateState = h.record[Object.keys(h.record)[i]];
     }
-    localStorage.setItem("habits", JSON.stringify(habits));
   });
+
+  localStorage.setItem("habits", JSON.stringify(habits));
+}
+
+/**
+ * Displays the current streak count
+ */
+function showCurrentStreak(index) {
+  if (habits.length === 0) {
+    displayStreak.innerHTML = `Current Streak:<br> N/A`;
+    return;
+  }
+
+  const currentStreak = habits[index - 1]["streak"];
+  displayStreak.innerHTML = `Current Streak:<br> ${currentStreak}`;
 }
 
 /**
@@ -390,7 +434,14 @@ function spawnHabitGraphBtn() {
 
   for (let i = 0; i < habits.length; i++) {
     const graphBtn = document.createElement("button");
-    graphBtn.textContent = habits[i]["habit"];
+    graphBtn.id = "graph-btn";
+
+    const color = document.createElement("span");
+    color.style = `width: 10px; height: 10px;   ; display: inline-block; \
+     vertical-align: middle; border-radius: 10px; \ margin-right: 0px;
+     background-color: ${habitColors[i + 1]}`;
+
+    graphBtn.appendChild(color);
 
     graphBtn.addEventListener("click", () => {
       const allBtns = graphBtns.querySelectorAll("button");
@@ -403,12 +454,18 @@ function spawnHabitGraphBtn() {
 
       showHabitGraph(graphIndex);
       graphBtn.disabled = true;
+
+      showCurrentStreak(graphIndex);
     });
 
     graphBtns.appendChild(graphBtn);
   }
 }
 
+/**
+ * Disables whichever habit's button when its graph is on display
+ * @param {integer} index the index of the button to disable
+ */
 function disableGraphBtn(index) {
   const allBtns = graphBtns.querySelectorAll("button");
 

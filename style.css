@@ -11,6 +11,165 @@
   --habit-8: #ff69b4;
 }
 
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  font-family: Arial, Helvetica, sans-serif;
+  justify-content: center;
+  align-items: center;
+  zoom: 1.5;
+}
+
+header {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  gap: 5px;
+  text-align: right;
+}
+
+header p {
+  margin: 0;
+  padding: 0;
+}
+
+header a {
+  margin: 0;
+  padding: 0;
+  font-size: 25px;
+  color: black;
+}
+
+.container {
+  display: flex;
+  gap: 80px;
+}
+
+#prev-date-btn,
+#next-date-btn,
+#delete-habit-btn,
+#add-habit-button,
+#today-btn {
+  background-color: transparent;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+#today-btn {
+  font-size: 14px;
+  padding: 0;
+}
+
+#today-btn {
+  background-color: #fff;
+  border: 2px solid #422800;
+  border-radius: 30px;
+  box-shadow: #422800 4px 4px 0 0;
+  color: #422800;
+  cursor: pointer;
+  display: inline-block;
+  font-weight: 600;
+  font-size: 18px;
+  padding: 0 18px;
+  line-height: 50px;
+  text-align: center;
+  text-decoration: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  zoom: 0.5;
+}
+
+#today-btn:hover {
+  background-color: #fbeee0;
+}
+
+#today-btn:active {
+  box-shadow: #422800 2px 2px 0 0;
+  transform: translate(2px, 2px);
+}
+
+#delete-habit-btn {
+  color: #a30000;
+}
+
+#habit-list {
+  padding-left: 0px;
+  margin-top: 5px;
+}
+
+#habit-item label {
+  display: inline-block;
+  max-width: 200px;
+  font-size: 0.9rem;
+}
+
+.date-container {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+#date-displaying {
+  font-size: 0.9rem;
+}
+
+.input-habit {
+  display: flex;
+  gap: 5px;
+}
+
+#dashboard {
+  display: flex;
+  align-items: center;
+}
+
+#graph-btns {
+  display: flex;
+  gap: 5px;
+}
+
+#display-streak {
+  text-align: center;
+}
+
+#habit-to-add {
+  font-size: 0.9rem;
+  padding-left: 5px;
+  border: none;
+  border-bottom: 1px solid black;
+  outline: none;
+  user-select: text;
+  caret-color: black;
+}
+
+#graph-btn {
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 20px;
+  height: 20px;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+#graph-btn:disabled {
+  background-color: #fbeee0; 
+}
+
 .squares {
   grid-auto-flow: column;
   grid-auto-columns: var(--square-size);
@@ -21,19 +180,16 @@
   padding-left: 0px;
 }
 
-body {
-  font-family: Arial, Helvetica, sans-serif;
-}
-
 .graph {
   width: 235px;
   display: inline-block;
   padding: 3px;
-  border: 1px #e1e4e8 solid;
+  border: 1px black solid;
   border-radius: 10px;
   margin: 20px;
   padding-left: 20px;
   padding-right: 20px;
+  padding-top: 10px;
 }
 
 ul {
