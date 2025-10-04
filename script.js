@@ -115,6 +115,7 @@ function displayHabits(date) {
       );
     } else {
       h["record"][formatDate(date)] = false;
+      sortDates();
       localStorage.setItem("habits", JSON.stringify(habits));
       habit = createHabitCheckbox(
         h["habit"],
@@ -215,11 +216,13 @@ function updateHabits(habitCheckbox, date) {
     habits.find((h) => h.habit === habitCheckbox.name)["record"][
       formatDate(date)
     ] = true;
+    sortDates();
     localStorage.setItem("habits", JSON.stringify(habits));
   } else if (habitCheckbox.checked === false) {
     habits.find((h) => h.habit === habitCheckbox.name)["record"][
       formatDate(date)
     ] = false;
+    sortDates();
     localStorage.setItem("habits", JSON.stringify(habits));
   }
 }
@@ -245,6 +248,7 @@ function fillHabits() {
     });
   }
 
+  sortDates();
   localStorage.setItem("habits", JSON.stringify(habits));
 }
 
@@ -324,6 +328,12 @@ nextDateBtn.addEventListener("click", () => {
 // The user can go to any date in the past
 dateDisplaying.addEventListener("change", () => {
   let newDate = parseDateInput(dateDisplaying.value);
+
+  if (newDate > today) {
+    newDate = today;
+    dateDisplaying.value = formatDate(today);
+    alert("No time traveling into the future bud");
+  }
 
   currentDate = newDate;
   displayHabits(newDate);
