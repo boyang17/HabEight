@@ -52,13 +52,13 @@ const habitColors = {
 };
 
 // Initialization
+setTheme();
 init();
 
 /**
  * Init and load everything at the start
  */
 function init() {
-  setTheme();
   dateDisplaying.setAttribute("max", formatDate(today));
   displayDate(currentDate);
   displayHabits(currentDate);
