@@ -525,6 +525,13 @@ function showHabitGraph(habitIndex) {
 function setTheme() {
   if (theme === "dark") {
     document.body.classList.add("dark");
+  } else if (theme === "light") {
+    document.body.classList.remove("dark");
+  } else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+    // Checks for system dark mode.
+    document.body.classList.add("dark");
+  } else {
+    document.body.classList.remove("dark");
   }
 }
 
