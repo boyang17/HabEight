@@ -9,6 +9,8 @@
   --habit-6: #0044cc;
   --habit-7: #ffd700;
   --habit-8: #ff69b4;
+  --limit-warning-color: #d9534f;
+  --limit-warning-bg: #fff0f0;
 }
 
 html,
@@ -36,6 +38,8 @@ body.dark {
   --input-text: #f1f1f1;
   --today-btn-border: #3399ff;
   --progress-dark: #a0a0a0;
+  --limit-warning-color: #f28b82;
+  --limit-warning-bg: #3a1f1f;
 }
 
 body {
@@ -48,6 +52,32 @@ button {
   background-color: var(--background-color, white);
   color: var(--input-text, black);
   border-color: var(--border-color, black);
+}
+
+#limit-warning {
+  font-size: 0.9rem;
+  padding-left: 4px;
+  margin-top: 0px;
+  font-style: italic;
+  color: var(--limit-warning-color);
+  background-color: var(--limit-warning-bg);
+  animation: fadeInOut 1.75s ease-in-out forwards;
+  width: 165px;
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }
 
 header {
@@ -128,12 +158,13 @@ header a {
 }
 
 #delete-habit-btn {
-  color: #a30000;
+  color: #ff5c5c;
 }
 
 #habit-list {
   padding-left: 0px;
   margin-top: 5px;
+  margin-bottom: 5px;
 }
 
 #habit-item label {
@@ -154,9 +185,19 @@ header a {
   font-size: 1.5rem;
 }
 
-.input-habit {
+#input-habit {
   display: flex;
   gap: 5px;
+  animation: fadeIn 0.75s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 #dashboard {

@@ -16,6 +16,8 @@ const dashboard = document.getElementById("dashboard");
 const displayStreak = document.getElementById("display-streak");
 const daysTracked = document.getElementById("days-tracked");
 const toggleThemeBtn = document.getElementById("toggle-theme-btn");
+const inputHabit = document.getElementById("input-habit")
+const limitWarning = document.getElementById("limit-warning");
 
 // State and Data
 /**
@@ -65,6 +67,7 @@ function init() {
   sortDates();
   disableNextBtn();
   disableAddHabitBtn();
+  showLimitWarning();
   spawnHabitGraphBtn();
   disableGraphBtn(graphIndex);
   showCurrentStreak(graphIndex);
@@ -165,6 +168,7 @@ function createHabitCheckbox(id, name, isChecked = false) {
     deleteHabit(name);
     disableAddHabitBtn();
     spawnHabitGraphBtn();
+    showLimitWarning();
     if (habits.length > 0) {
       disableGraphBtn(graphIndex);
       if (graphIndex > habits.length) {
@@ -261,6 +265,7 @@ addHabitBtn.addEventListener("click", () => {
   displayHabits(currentDate);
   habitToAdd.value = "";
   disableAddHabitBtn();
+  showLimitWarning();
   spawnHabitGraphBtn();
   disableGraphBtn(graphIndex);
   showHabitGraph(graphIndex);
@@ -545,3 +550,13 @@ toggleThemeBtn.addEventListener("click", () => {
     localStorage.setItem("theme", "light");
   }
 });
+
+function showLimitWarning() {
+  if (habits.length < 8) {
+    limitWarning.style.display = "none";
+    inputHabit.style.display = "block";
+  } else {
+    inputHabit.style.display = "none";
+    limitWarning.style.display = "block";
+  }
+}
