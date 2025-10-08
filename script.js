@@ -20,6 +20,7 @@ const inputHabit = document.getElementById("input-habit");
 const limitWarning = document.getElementById("limit-warning");
 const snackbar = document.getElementById("snackbar");
 const dashboardNote = document.getElementById("dashboard-note");
+const infoBtn = document.getElementById("info-btn");
 
 // State and Data
 /**
@@ -641,3 +642,15 @@ function showDashboardNotes() {
 }
 
 showDashboardNotes();
+
+infoBtn.addEventListener("click", () => {
+  if (dashboardNote.style.display === "none") {
+    dashboardNote.style.animation = "fadeIn 0.75s ease-in-out";
+    dashboardNote.style.display = "grid";
+  } else {
+    dashboardNote.style.animation = "fadeOut 0.75s ease-in-out forwards";
+    setTimeout(() => {
+      dashboardNote.style.display = "none";
+    }, 750);
+  }
+});
