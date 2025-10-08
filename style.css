@@ -145,6 +145,10 @@ header a {
   transform: scale(1.1);
 }
 
+.hover-effect:hover {
+  transform: scale(1.1);
+}
+
 #prev-date-btn:active,
 #next-date-btn:active,
 #delete-habit-btn:active,

@@ -75,6 +75,7 @@ function init() {
   disableGraphBtn(graphIndex);
   showCurrentStreak(graphIndex);
   showHabitGraph(graphIndex);
+  showDashboardNotes();
 }
 
 // Jumps to today's date
@@ -481,6 +482,8 @@ function spawnHabitGraphBtn() {
       graphBtn.disabled = true;
 
       showCurrentStreak(graphIndex);
+      dashboardNote.innerHTML = "";
+      showDashboardNotes();
     });
 
     graphBtns.appendChild(graphBtn);
@@ -527,8 +530,21 @@ function showHabitGraph(habitIndex) {
     }
     squares.insertAdjacentHTML(
       "beforeend",
-      `<li data-level="${level}" title="${dates[i]}"></li>`
+      `<li id="date-square-${i}" data-level="${level}" title="${dates[i]}"></li>`
     );
+
+    const dateSqaure = document.getElementById(`date-square-${i}`);
+    dateSqaure.style =
+      "font-size: 16px; cursor: pointer;\
+      transition: transform 0.2s ease-in-out;";
+    dateSqaure.classList.add("hover-effect")
+
+    dateSqaure.addEventListener("click", () => {
+      const parts = dates[i].split("-");
+      currentDate = new Date(parts[0], parts[1] - 1, parts[2]);
+      localStorage.setItem("currentDate", JSON.stringify(currentDate));
+      init();
+    });
   }
 }
 
@@ -597,6 +613,9 @@ habitToAdd.addEventListener("keydown", (event) => {
   }
 });
 
+/**
+ * Creates the information for the habit graph
+ */
 function showDashboardNotes() {
   const noteOne = document.createElement("div");
   noteOne.classList.add("note-style");
@@ -641,8 +660,7 @@ function showDashboardNotes() {
   dashboardNote.appendChild(noteFour);
 }
 
-showDashboardNotes();
-
+// Clicking on the info button will show/hide the habit graph info
 infoBtn.addEventListener("click", () => {
   if (dashboardNote.style.display === "none") {
     dashboardNote.style.animation = "fadeIn 0.75s ease-in-out";
