@@ -19,6 +19,7 @@ const toggleThemeBtn = document.getElementById("toggle-theme-btn");
 const inputHabit = document.getElementById("input-habit");
 const limitWarning = document.getElementById("limit-warning");
 const snackbar = document.getElementById("snackbar");
+const dashboardNote = document.getElementById("dashboard-note");
 
 // State and Data
 /**
@@ -461,9 +462,8 @@ function spawnHabitGraphBtn() {
     graphBtn.id = "graph-btn";
 
     const color = document.createElement("span");
-    color.style = `width: 10px; height: 10px;   ; display: inline-block; \
-     vertical-align: middle; border-radius: 10px; \ margin-right: 0px;
-     background-color: ${habitColors[i + 1]}`;
+    color.id = "color-circle";
+    color.style.backgroundColor = `${habitColors[i + 1]}`;
 
     graphBtn.appendChild(color);
 
@@ -595,3 +595,49 @@ habitToAdd.addEventListener("keydown", (event) => {
     addHabitBtn.click();
   }
 });
+
+function showDashboardNotes() {
+  const noteOne = document.createElement("div");
+  noteOne.classList.add("note-style");
+  const noteOneText = document.createElement("p");
+  noteOneText.innerText = "Each square represents one day tracked";
+  noteOne.appendChild(noteOneText);
+
+  const noteTwo = document.createElement("div");
+  noteTwo.classList.add("note-style");
+  noteTwo.innerHTML = "";
+
+  const color = document.createElement("span");
+  color.id = "gray-square";
+  color.style.backgroundColor = `${habitColors[graphIndex]}`;
+
+  const noteTwoText = document.createElement("p");
+  noteTwoText.innerText = "show tracked days";
+  noteTwo.appendChild(color);
+  noteTwo.appendChild(noteTwoText);
+
+  const noteThree = document.createElement("div");
+  noteThree.classList.add("note-style");
+  const noteThreeText = document.createElement("p");
+  noteThreeText.innerText = "Click any square to jump to that date";
+  noteThree.appendChild(noteThreeText);
+
+  const noteFour = document.createElement("div");
+  noteFour.classList.add("note-style");
+  noteFour.innerHTML = "";
+
+  const gray = document.createElement("span");
+  gray.id = "gray-square";
+
+  const noteFourText = document.createElement("p");
+  noteFourText.innerText = "show untracked days";
+  noteFour.appendChild(gray);
+  noteFour.appendChild(noteFourText);
+
+  dashboardNote.appendChild(noteOne);
+  dashboardNote.appendChild(noteTwo);
+  dashboardNote.appendChild(noteThree);
+  dashboardNote.appendChild(noteFour);
+}
+
+showDashboardNotes();

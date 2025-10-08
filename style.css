@@ -229,6 +229,7 @@ header a {
 
 #dashboard {
   display: flex;
+  flex-direction: column;
   align-items: center;
 }
 
@@ -312,6 +313,10 @@ header a {
   display: flex;
   justify-content: center;
   text-align: right;
+  font-size: 0.65rem;
+}
+
+#dashboard-notes {
   font-size: 0.65rem;
 }
 
@@ -426,4 +431,43 @@ ul {
 #snackbar.show {
   visibility: visible;
   animation: fadeInOut 1.75s ease-in-out forwards;
+}
+
+#dashboard-note {
+  zoom: 0.55;
+  display: grid;
+  grid-template-columns: 315px 168px;
+  align-items: center;
+  justify-content: center;
+  gap: 0px;
+  font-size: 1rem;
+  margin-top: 10px;
+}
+
+.note-style {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 4px;
+  height: 18px;
+}
+
+#gray-square {
+  width: 13px;
+  height: 13px;
+  display: inline-block;
+  vertical-align: middle;
+  border-radius: 1px;
+  margin-right: 0px;
+  background-color: var(--progress-dark, #ebedf0);
+}
+
+#color-circle {
+  width: 10px;
+  height: 10px;
+  display: inline-block;
+  vertical-align: middle;
+  border-radius: 10px;
+  margin-right: 0px;
+  background-color: var(--progress-dark, #ebedf0);
 }
