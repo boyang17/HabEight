@@ -16,8 +16,9 @@ const dashboard = document.getElementById("dashboard");
 const displayStreak = document.getElementById("display-streak");
 const daysTracked = document.getElementById("days-tracked");
 const toggleThemeBtn = document.getElementById("toggle-theme-btn");
-const inputHabit = document.getElementById("input-habit")
+const inputHabit = document.getElementById("input-habit");
 const limitWarning = document.getElementById("limit-warning");
+const snackbar = document.getElementById("snackbar");
 
 // State and Data
 /**
@@ -263,7 +264,6 @@ addHabitBtn.addEventListener("click", () => {
   fillHabits();
   sortDates();
   displayHabits(currentDate);
-  habitToAdd.value = "";
   disableAddHabitBtn();
   showLimitWarning();
   spawnHabitGraphBtn();
@@ -281,14 +281,14 @@ function addHabit(date) {
   let inputHabit = habitToAdd.value.trim();
 
   if (!inputHabit) {
-    alert("Please enter a habit!");
+    showSnackbar("Please enter a habit!");
     return;
   }
 
   let alreadyExists = habits.some((h) => h.habit === inputHabit);
 
   if (alreadyExists) {
-    alert("Cannot add repeated habit!");
+    showSnackbar("Cannot add repeated habit!");
     return;
   }
 
@@ -300,6 +300,7 @@ function addHabit(date) {
 
   habits.push(habit);
   localStorage.setItem("habits", JSON.stringify(habits));
+  habitToAdd.value = "";
 }
 
 // Adds a click listner so the user can go to the previous date
@@ -337,7 +338,8 @@ dateDisplaying.addEventListener("change", () => {
   if (newDate > today) {
     newDate = today;
     dateDisplaying.value = formatDate(today);
-    alert("No time traveling into the future bud");
+    showSnackbar("No time traveling into the future bud");
+    return;
   }
 
   currentDate = newDate;
@@ -381,8 +383,11 @@ function differentDate(when) {
  */
 function disableNextBtn() {
   if (formatDate(currentDate) === formatDate(today)) {
+    dateDisplaying.value = formatDate(today);
     nextDateBtn.disabled = true;
+    nextDateBtn.style.color = "#A6A7A8";
   } else {
+    nextDateBtn.style.color = "";
     nextDateBtn.disabled = false;
   }
 }
@@ -551,6 +556,9 @@ toggleThemeBtn.addEventListener("click", () => {
   }
 });
 
+/**
+ * Shows the limit warning if the habits limit is reached
+ */
 function showLimitWarning() {
   if (habits.length < 8) {
     limitWarning.style.display = "none";
@@ -559,4 +567,16 @@ function showLimitWarning() {
     inputHabit.style.display = "none";
     limitWarning.style.display = "block";
   }
+}
+
+/**
+ * Shows a alert snackbar at the bottom right of the screen
+ * @param {string} message alert message
+ */
+function showSnackbar(message) {
+  snackbar.innerText = message;
+  snackbar.className = "show";
+  setTimeout(() => {
+    snackbar.className = snackbar.className.replace("show", "");
+  }, 1750);
 }

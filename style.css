@@ -370,3 +370,22 @@ ul {
     overflow-x: hidden;
   }
 }
+
+#snackbar {
+  visibility: hidden;
+  width: fit-content;
+  font-size: 0.8rem;
+  background-color: var(--limit-warning-bg);
+  color: var(--limit-warning-color);;
+  text-align: center;
+  border-radius: 2px;
+  padding: 8px;
+  position: fixed;
+  right: 10px;
+  bottom: 10px;
+}
+
+#snackbar.show {
+  visibility: visible;
+  animation: fadeInOut 1.75s ease-in-out forwards;
+}
