@@ -126,6 +126,32 @@ header a {
   border: none;
   font-size: 16px;
   cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+}
+
+#github-icon {
+  transition: transform 0.2s ease-in-out;
+}
+
+#prev-date-btn:hover,
+#next-date-btn:hover,
+#delete-habit-btn:hover,
+#add-habit-button:hover,
+#toggle-theme-btn:hover,
+#today-btn:hover,
+#github-icon:hover {
+  transform: scale(1.1);
+}
+
+#prev-date-btn:active,
+#next-date-btn:active,
+#delete-habit-btn:active,
+#add-habit-button:active,
+#toggle-theme-btn:active,
+#today-btn:active,
+#github-icon:active {
+  transform: translateY(0.5px);
+  transition: none;
 }
 
 #today-btn {
@@ -146,6 +172,7 @@ header a {
   -webkit-user-select: none;
   touch-action: manipulation;
   zoom: 0.45;
+  transition: transform 0.2s ease-in-out;
 }
 
 #today-btn:hover {
@@ -167,7 +194,7 @@ header a {
   margin-bottom: 5px;
 }
 
-#habit-item label {
+#habit-item {
   display: inline-block;
   max-width: 200px;
   font-size: 0.9rem;
@@ -235,10 +262,21 @@ header a {
   font-size: 16px;
   cursor: pointer;
   border-radius: 8px;
+  transition: transform 0.2s ease-in-out;
 }
 
 #graph-btn:disabled {
   background-color: #fbeee0;
+}
+
+#graph-btn:hover {
+  transform: scale(1.1);
+  background-color: #fbeee0;
+}
+
+#graph-btn:active {
+  transform: translateY(0.5px);
+  transition: none;
 }
 
 .squares {
@@ -376,7 +414,7 @@ ul {
   width: fit-content;
   font-size: 0.8rem;
   background-color: var(--limit-warning-bg);
-  color: var(--limit-warning-color);;
+  color: var(--limit-warning-color);
   text-align: center;
   border-radius: 2px;
   padding: 8px;

@@ -68,7 +68,7 @@ function init() {
   sortDates();
   disableNextBtn();
   disableAddHabitBtn();
-  showLimitWarning();
+  showLimitWarning("none", "none");
   spawnHabitGraphBtn();
   disableGraphBtn(graphIndex);
   showCurrentStreak(graphIndex);
@@ -165,11 +165,14 @@ function createHabitCheckbox(id, name, isChecked = false) {
   deleteHabitBtn.title = "delete";
   deleteHabitBtn.innerHTML = `<i class="fa fa-trash-o" aria-hidden="true"></i>`;
 
+  const habitItem = document.createElement("li");
+
   deleteHabitBtn.addEventListener("click", () => {
     deleteHabit(name);
     disableAddHabitBtn();
     spawnHabitGraphBtn();
-    showLimitWarning();
+    showLimitWarning("", "block");
+
     if (habits.length > 0) {
       disableGraphBtn(graphIndex);
       if (graphIndex > habits.length) {
@@ -185,7 +188,6 @@ function createHabitCheckbox(id, name, isChecked = false) {
     }
   });
 
-  const habitItem = document.createElement("li");
   habitItem.id = "habit-item";
   habitItem.style.display = "flex";
   habitItem.style.alignItems = "center";
@@ -265,7 +267,7 @@ addHabitBtn.addEventListener("click", () => {
   sortDates();
   displayHabits(currentDate);
   disableAddHabitBtn();
-  showLimitWarning();
+  showLimitWarning("", "block");
   spawnHabitGraphBtn();
   disableGraphBtn(graphIndex);
   showHabitGraph(graphIndex);
@@ -558,14 +560,20 @@ toggleThemeBtn.addEventListener("click", () => {
 
 /**
  * Shows the limit warning if the habits limit is reached
+ * @param {string} animationState controls whether to show the animation or not
+ * @param {string} limitWarningState controls whether limit warning sign is shown or not
  */
-function showLimitWarning() {
+function showLimitWarning(animationState, limitWarningState) {
   if (habits.length < 8) {
+    inputHabit.style.animation = animationState;
+    inputHabit.style.animation = "fadeIn 0.75s ease-in-out;";
     limitWarning.style.display = "none";
     inputHabit.style.display = "block";
   } else {
+    limitWarning.style.animation = animationState;
+    limitWarning.style.animation = "fadeIn 0.75s ease-in-out;";
     inputHabit.style.display = "none";
-    limitWarning.style.display = "block";
+    limitWarning.style.display = limitWarningState;
   }
 }
 
@@ -580,3 +588,10 @@ function showSnackbar(message) {
     snackbar.className = snackbar.className.replace("show", "");
   }, 1750);
 }
+
+// Gave ability to add habit when enter is pressed inside the habit input
+habitToAdd.addEventListener("keydown", (event) => {
+  if (event.key === "Enter") {
+    addHabitBtn.click();
+  }
+});
