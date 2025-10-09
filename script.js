@@ -162,6 +162,7 @@ function createHabitCheckbox(id, name, isChecked = false) {
   });
 
   const habitLabel = document.createElement("label");
+  habitLabel.id = "habit-label";
   habitLabel.htmlFor = id;
   habitLabel.textContent = name;
   habitLabel.style = "margin: 5px;";

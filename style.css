@@ -57,7 +57,7 @@ button {
 #limit-warning {
   font-size: 0.9rem;
   padding-left: 4px;
-  margin-top: 0px;
+  margin-top: 5px;
   font-style: italic;
   color: var(--limit-warning-color);
   background-color: var(--limit-warning-bg);
@@ -202,14 +202,22 @@ header a {
 
 #habit-list {
   padding-left: 0px;
-  margin-top: 5px;
+  margin-top: 10px;
   margin-bottom: 5px;
 }
 
 #habit-item {
   display: inline-block;
   max-width: 200px;
+  max-height: 41.4px;
   font-size: 0.9rem;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+#habit-label {
+  max-height: 41.4px;
+  overflow: auto;
 }
 
 .date-container {
@@ -225,6 +233,7 @@ header a {
 }
 
 #input-habit {
+  /* margin-top: 10px; */
   display: flex;
   gap: 5px;
   animation: fadeIn 0.75s ease-in-out;
