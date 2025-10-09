@@ -21,6 +21,7 @@ const limitWarning = document.getElementById("limit-warning");
 const snackbar = document.getElementById("snackbar");
 const dashboardNote = document.getElementById("dashboard-note");
 const infoBtn = document.getElementById("info-btn");
+const quote = document.getElementById("quote");
 
 // State and Data
 /**
@@ -54,6 +55,18 @@ const habitColors = {
   6: "#0044cc",
   7: "#ffd700",
   8: "#ff69b4",
+};
+
+const milestoneQuotes = {
+  1: "One who climbs the ladder must begin at the bottom",
+  3: "Dream big. Work hard. Stay focused",
+  7: "Small steps, every day",
+  14: "Progress, not perfection.",
+  21: "Success is a series of small wins",
+  30: "Excellence is not an act, but a habit",
+  50: "What was once effort is now your nature",
+  80: "Beyond mastery lies meaning",
+  120: "Per aspera ad astra",
 };
 
 // Initialization
@@ -463,7 +476,14 @@ function showCurrentStreak(index) {
   }
 
   const currentStreak = habits[index - 1]["streak"];
-  displayStreak.innerHTML = `Current Streak:<br>🔥 ${currentStreak}`;
+  displayStreak.innerHTML = `Current Streak:
+  <div id="streak">
+  <img id= "streak-fire" src=""> 
+  <span id="streak-number" class="milestone">${currentStreak}</span>
+  </div>`;
+
+  const streakNumber = document.getElementById("streak-number");
+  reachMilestone(currentStreak, streakNumber);
 }
 
 /**
@@ -681,10 +701,10 @@ function showDashboardNotes() {
 // Clicking on the info button will show/hide the habit graph info
 infoBtn.addEventListener("click", () => {
   if (dashboardNote.style.display === "none") {
-    dashboardNote.style.animation = "fadeIn 0.75s ease-in-out";
+    dashboardNote.style.animation = "slideDown 0.5s ease-in-out forwards";
     dashboardNote.style.display = "grid";
   } else {
-    dashboardNote.style.animation = "fadeOut 0.75s ease-in-out forwards";
+    dashboardNote.style.animation = "slideUp 0.5s ease-in-out forwards";
     setTimeout(() => {
       dashboardNote.style.display = "none";
     }, 750);
@@ -717,8 +737,23 @@ function highlightHabit(index) {
   }
 
   if (document.body.classList.contains("dark")) {
-    habitItems[index - 1].getElementsByTagName("label")[0].style.backgroundColor = "rgba(135, 206, 235, 0.8)";
+    habitItems[index - 1].getElementsByTagName(
+      "label"
+    )[0].style.backgroundColor = "rgba(135, 206, 235, 0.8)";
   } else {
-    habitItems[index - 1].getElementsByTagName("label")[0].style.backgroundColor = "rgba(255, 255, 150, 0.8)";
+    habitItems[index - 1].getElementsByTagName(
+      "label"
+    )[0].style.backgroundColor = "rgba(255, 255, 150, 0.8)";
+  }
+}
+
+function reachMilestone(num, object) {
+  let str = num.toString();
+  quote.innerText = "";
+  for (const [key, value] of Object.entries(milestoneQuotes)) {
+    if (str === key) {
+      quote.innerText = value;
+      // object.style.animation = "pulse 0.5s ease-in-out";
+    }
   }
 }
