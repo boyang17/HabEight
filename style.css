@@ -220,6 +220,7 @@ header a {
   max-height: 41.4px;
   overflow: auto;
   border-radius: 2px;
+  padding: 2px;
 }
 
 .date-container {

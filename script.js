@@ -328,6 +328,7 @@ prevDateBtn.addEventListener("click", () => {
   sortDates();
   disableNextBtn();
   showHabitGraph(graphIndex);
+  highlightHabit(graphIndex);
 
   localStorage.setItem("currentDate", JSON.stringify(newDate));
 });
@@ -342,6 +343,7 @@ nextDateBtn.addEventListener("click", () => {
   sortDates();
   disableNextBtn();
   showHabitGraph(graphIndex);
+  highlightHabit(graphIndex);
 
   localStorage.setItem("currentDate", JSON.stringify(newDate));
 });
@@ -363,6 +365,7 @@ dateDisplaying.addEventListener("change", () => {
   sortDates();
   disableNextBtn();
   showHabitGraph(graphIndex);
+  highlightHabit(graphIndex);
 
   localStorage.setItem("currentDate", JSON.stringify(newDate));
 });
