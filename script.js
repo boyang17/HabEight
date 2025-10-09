@@ -75,6 +75,7 @@ function init() {
   disableGraphBtn(graphIndex);
   showCurrentStreak(graphIndex);
   showHabitGraph(graphIndex);
+  dashboardNote.innerHTML = "";
   showDashboardNotes();
 }
 
@@ -519,7 +520,7 @@ function showHabitGraph(habitIndex) {
   let recordLength = Object.keys(habits[habitIndex - 1].record).length;
   // Max squares shown: 60
   let startIndex = Math.min(recordLength - 1, 59);
-  daysTracked.textContent = `${startIndex + 1} days`;
+  daysTracked.innerText = `Total days tracked: ${recordLength} days`;
   let level = 0;
 
   for (let i = startIndex; i >= 0; i--) {
@@ -537,7 +538,7 @@ function showHabitGraph(habitIndex) {
     dateSqaure.style =
       "font-size: 16px; cursor: pointer;\
       transition: transform 0.2s ease-in-out;";
-    dateSqaure.classList.add("hover-effect")
+    dateSqaure.classList.add("hover-effect");
 
     dateSqaure.addEventListener("click", () => {
       const parts = dates[i].split("-");

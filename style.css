@@ -162,7 +162,7 @@ header a {
 }
 
 #today-btn {
-  background-color: var(--background-color, #fff);
+  background-color: var(--background-color, white);
   border: 2px solid var(--today-btn-border, #422800);
   border-radius: 30px;
   box-shadow: var(--today-btn-border, #422800) 4px 4px 0 0;
@@ -439,14 +439,10 @@ ul {
 
 #dashboard-note {
   zoom: 0.55;
-  /* display: grid; */
+  margin-top: 5px;
   grid-template-columns: 315px 168px;
-  align-items: center;
-  justify-content: center;
   gap: 0px;
   row-gap: 4px;
-  font-size: 1rem;
-  margin-top: 5px;
   animation: none;
 }
 
@@ -457,10 +453,6 @@ ul {
   to {
     opacity: 0;
   }
-}
-
-.info-row {
-  justify-content: center;
 }
 
 .note-style {
@@ -499,5 +491,11 @@ ul {
   display: flex;
   flex-direction: column;
   margin-top: 0px;
+  height: 0px;
+}
+
+#habit-row {
+  display: flex;
+  flex-direction: column;
   height: 0px;
 }

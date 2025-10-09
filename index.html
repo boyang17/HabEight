@@ -40,18 +40,21 @@
         </div>
 
         <ul id="habit-list"></ul>
-        <div id="input-habit">
-          <input
-            type="text"
-            name="habit-to-add"
-            id="habit-to-add"
-            placeholder="A daily habit to track"
-          />
-          <button id="add-habit-button" title="add">
-            <i class="fa fa-plus" aria-hidden="true"></i>
-          </button>
+
+        <div id="habit-row">
+          <div id="input-habit">
+            <input
+              type="text"
+              name="habit-to-add"
+              id="habit-to-add"
+              placeholder="A daily habit to track"
+            />
+            <button id="add-habit-button" title="add">
+              <i class="fa fa-plus" aria-hidden="true"></i>
+            </button>
+          </div>
+          <p id="limit-warning">Eight habits limit reached</p>
         </div>
-        <p id="limit-warning">Eight habits limit reached</p>
       </div>
 
       <h2 id="display-streak"></h2>
@@ -60,11 +63,11 @@
         <div class="graph">
           <div class="graph-stat">
             <div id="graph-btns"></div>
-            <p id="days-tracked"></p>
           </div>
           <ul class="squares"></ul>
+          <p id="days-tracked"></p>
         </div>
-        
+
         <div id="info-row">
           <button id="info-btn" title="Habit graph info">
             <i class="fa fa-info" aria-hidden="true"></i>
