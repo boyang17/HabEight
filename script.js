@@ -76,6 +76,7 @@ function init() {
   showCurrentStreak(graphIndex);
   showHabitGraph(graphIndex);
   dashboardNote.innerHTML = "";
+  initDaysTracked();
   showDashboardNotes();
 }
 
@@ -151,6 +152,7 @@ function createHabitCheckbox(id, name, isChecked = false) {
   habitCheckbox.style = `width: 15px; height: 15px;   ; display: inline-block; \
      vertical-align: middle; border-radius: 1px; \ margin-right: 0px;
      accent-color: ${habitColors[habits.findIndex((h) => h.habit === id) + 1]}`;
+  habitCheckbox.classList.add("hover-effect")
 
   habitCheckbox.addEventListener("change", () => {
     updateHabits(habitCheckbox, currentDate);
@@ -176,6 +178,7 @@ function createHabitCheckbox(id, name, isChecked = false) {
     disableAddHabitBtn();
     spawnHabitGraphBtn();
     showLimitWarning("", "block");
+    initDaysTracked();
 
     if (habits.length > 0) {
       disableGraphBtn(graphIndex);
@@ -451,7 +454,7 @@ function showCurrentStreak(index) {
   }
 
   const currentStreak = habits[index - 1]["streak"];
-  displayStreak.innerHTML = `Current Streak:<br> ${currentStreak}`;
+  displayStreak.innerHTML = `Current Streak:<br>🔥 ${currentStreak}`;
 }
 
 /**
@@ -519,8 +522,11 @@ function showHabitGraph(habitIndex) {
   const dates = Object.keys(habits[habitIndex - 1].record);
   let recordLength = Object.keys(habits[habitIndex - 1].record).length;
   // Max squares shown: 60
-  let startIndex = Math.min(recordLength - 1, 59);
-  daysTracked.innerText = `Total days tracked: ${recordLength} days`;
+  let startIndex = Math.min(recordLength - 1, 119);
+
+  daysTracked.innerText = `Total days tracked: ${recordLength} days | Showing: ${
+    startIndex + 1
+  } days`;
   let level = 0;
 
   for (let i = startIndex; i >= 0; i--) {
@@ -537,7 +543,7 @@ function showHabitGraph(habitIndex) {
     const dateSqaure = document.getElementById(`date-square-${i}`);
     dateSqaure.style =
       "font-size: 16px; cursor: pointer;\
-      transition: transform 0.2s ease-in-out;";
+      transition: transform 0.1s ease-in-out;";
     dateSqaure.classList.add("hover-effect");
 
     dateSqaure.addEventListener("click", () => {
@@ -673,3 +679,12 @@ infoBtn.addEventListener("click", () => {
     }, 750);
   }
 });
+
+/**
+ * Initialize the days tracked and days showing to N/A
+ */
+function initDaysTracked() {
+  if (habits.length === 0) {
+    daysTracked.innerText = `Total days tracked: N/A days | Showing: N/A days`;
+  }
+}

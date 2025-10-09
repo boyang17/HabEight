@@ -1,5 +1,5 @@
 :root {
-  --square-size: 15px;
+  --square-size: 11px;
   --square-gap: 5px;
   --habit-1: #f08080;
   --habit-2: #7bc96f;
@@ -149,6 +149,11 @@ header a {
   transform: scale(1.1);
 }
 
+.hover-effect:active {
+  transform: translateY(0.5px);
+  transition: none;
+}
+
 #prev-date-btn:active,
 #next-date-btn:active,
 #delete-habit-btn:active,
@@ -293,7 +298,7 @@ header a {
   grid-auto-columns: var(--square-size);
   display: grid;
   grid-gap: var(--square-gap);
-  grid-template-rows: repeat(5, var(--square-size));
+  grid-template-rows: repeat(8, var(--square-size));
   padding: 0px;
   padding-left: 0px;
 }
