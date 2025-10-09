@@ -222,6 +222,14 @@ header a {
   margin-bottom: 5px;
 }
 
+#habit-item:hover #delete-habit-btn {
+  visibility: visible;
+}
+
+#delete-habit-btn {
+  visibility: hidden;
+}
+
 #habit-label {
   max-height: 41.4px;
   overflow: auto;

@@ -217,6 +217,7 @@ function createHabitCheckbox(id, name, isChecked = false) {
   habitItem.id = "habit-item";
   habitItem.style.display = "flex";
   habitItem.style.alignItems = "center";
+  habitItem.style.width = "fit-content"
   habitItem.appendChild(habitCheckbox);
   habitItem.appendChild(habitLabel);
   habitItem.appendChild(deleteHabitBtn);
