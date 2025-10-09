@@ -59,8 +59,9 @@ const habitColors = {
 
 const milestoneQuotes = {
   1: "One who climbs the ladder must begin at the bottom",
-  3: "Dream big. Work hard. Stay focused",
-  7: "Small steps, every day",
+  3: "Small steps, every day",
+  7: "It gets easier. Every day it gets a little easier. \
+  But you gotta do it every day — that's the hard part.",
   14: "Progress, not perfection.",
   21: "Success is a series of small wins",
   30: "Excellence is not an act, but a habit",
@@ -476,8 +477,8 @@ function showCurrentStreak(index) {
   }
 
   const currentStreak = habits[index - 1]["streak"];
-  displayStreak.innerHTML = `Current Streak:
-  <div id="streak">
+  displayStreak.innerHTML = `<div id="streak" class="tooltip">
+  <span class="tooltiptext">Current Streak: consecutive days you've completed all your habits.</span>
   <img id= "streak-fire" src=""> 
   <span id="streak-number" class="milestone">${currentStreak}</span>
   </div>`;

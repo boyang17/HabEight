@@ -533,11 +533,42 @@ ul {
 }
 
 #streak-container {
-  width: 200px;
+  width: 100%;
+}
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip .tooltiptext {
+  font-weight: normal;
+  font-size: 0.3rem;
+  visibility: hidden;
+  width: 80px;
+  background-color: #33333378;
+  color: #f1f1f1;
+  text-align: center;
+  border-radius: 3px;
+  padding: 2px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 115%;
+  left: 50%;
+  margin-left: -40px;
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
 }
 
 #display-streak {
   display: flex;
+  justify-content: center;
+  align-items: center;
   flex-direction: column;
   text-align: center;
   gap: 10px;
@@ -555,6 +586,8 @@ ul {
   justify-content: center;
   gap: 4px;
   height: 30px;
+  zoom: 2.2;
+  /* width: fit-content; */
 }
 
 #milestone-quotes {
