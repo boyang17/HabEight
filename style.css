@@ -11,6 +11,7 @@
   --habit-8: #ff69b4;
   --limit-warning-color: #d9534f;
   --limit-warning-bg: #fff0f0;
+  --dark-highlight: rgba(135, 206, 235, 0.8);
 }
 
 html,
@@ -218,6 +219,7 @@ header a {
 #habit-label {
   max-height: 41.4px;
   overflow: auto;
+  border-radius: 2px;
 }
 
 .date-container {

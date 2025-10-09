@@ -75,6 +75,7 @@ function init() {
   disableGraphBtn(graphIndex);
   showCurrentStreak(graphIndex);
   showHabitGraph(graphIndex);
+  highlightHabit(graphIndex);
   dashboardNote.innerHTML = "";
   initDaysTracked();
   showDashboardNotes();
@@ -152,7 +153,7 @@ function createHabitCheckbox(id, name, isChecked = false) {
   habitCheckbox.style = `width: 15px; height: 15px;   ; display: inline-block; \
      vertical-align: middle; border-radius: 1px; \ margin-right: 0px;
      accent-color: ${habitColors[habits.findIndex((h) => h.habit === id) + 1]}`;
-  habitCheckbox.classList.add("hover-effect")
+  habitCheckbox.classList.add("hover-effect");
 
   habitCheckbox.addEventListener("change", () => {
     updateHabits(habitCheckbox, currentDate);
@@ -189,9 +190,12 @@ function createHabitCheckbox(id, name, isChecked = false) {
         showHabitGraph(graphIndex);
         disableGraphBtn(graphIndex);
         showCurrentStreak(graphIndex);
+        highlightHabit(graphIndex);
       }
+      highlightHabit(graphIndex);
     } else {
       showCurrentStreak(graphIndex);
+      highlightHabit(graphIndex);
       squares.innerHTML = "";
     }
   });
@@ -280,6 +284,7 @@ addHabitBtn.addEventListener("click", () => {
   disableGraphBtn(graphIndex);
   showHabitGraph(graphIndex);
   showCurrentStreak(graphIndex);
+  highlightHabit(graphIndex);
 });
 
 /**
@@ -488,6 +493,7 @@ function spawnHabitGraphBtn() {
 
       showCurrentStreak(graphIndex);
       dashboardNote.innerHTML = "";
+      highlightHabit(graphIndex);
       showDashboardNotes();
     });
 
@@ -575,6 +581,7 @@ function setTheme() {
 // Toggles the webpage between dark and light mode
 toggleThemeBtn.addEventListener("click", () => {
   document.body.classList.toggle("dark");
+  highlightHabit(graphIndex);
 
   if (document.body.classList.contains("dark")) {
     localStorage.setItem("theme", "dark");
@@ -687,5 +694,28 @@ infoBtn.addEventListener("click", () => {
 function initDaysTracked() {
   if (habits.length === 0) {
     daysTracked.innerText = `Total days tracked: N/A days | Showing: N/A days`;
+  }
+}
+
+/**
+ * highlights the habit label corresponding to the selected habit graph
+ * @param {integer} index the index of the habit to highlight
+ * @returns nothing
+ */
+function highlightHabit(index) {
+  const habitItems = habitList.getElementsByTagName("li");
+
+  for (let i = 0; i < habitItems.length; i++) {
+    habitItems[i].getElementsByTagName("label")[0].style.backgroundColor = "";
+  }
+
+  if (habits.length === 0) {
+    return;
+  }
+
+  if (document.body.classList.contains("dark")) {
+    habitItems[index - 1].getElementsByTagName("label")[0].style.backgroundColor = "rgba(135, 206, 235, 0.8)";
+  } else {
+    habitItems[index - 1].getElementsByTagName("label")[0].style.backgroundColor = "rgba(255, 255, 150, 0.8)";
   }
 }
