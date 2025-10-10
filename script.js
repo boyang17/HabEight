@@ -22,6 +22,8 @@ const snackbar = document.getElementById("snackbar");
 const dashboardNote = document.getElementById("dashboard-note");
 const infoBtn = document.getElementById("info-btn");
 const quote = document.getElementById("quote");
+const dateInfoBtn = document.getElementById("date-info-btn");
+const habitListNote = document.getElementById("habit-list-note");
 
 // State and Data
 /**
@@ -58,6 +60,7 @@ const habitColors = {
 };
 
 const milestoneQuotes = {
+  0: "The best time to plant a tree is 20 years ago. The second-best time is now.",
   1: "One who climbs the ladder must begin at the bottom",
   3: "Small steps, every day",
   7: "It gets easier. Every day it gets a little easier. \
@@ -170,6 +173,8 @@ function createHabitCheckbox(id, name, isChecked = false) {
   habitCheckbox.classList.add("hover-effect");
 
   habitCheckbox.addEventListener("change", () => {
+    fillHabits();
+    sortDates();
     updateHabits(habitCheckbox, currentDate);
     calculateCurrentStreak();
     showHabitGraph(graphIndex);
@@ -217,7 +222,7 @@ function createHabitCheckbox(id, name, isChecked = false) {
   habitItem.id = "habit-item";
   habitItem.style.display = "flex";
   habitItem.style.alignItems = "center";
-  habitItem.style.width = "fit-content"
+  habitItem.style.width = "fit-content";
   habitItem.appendChild(habitCheckbox);
   habitItem.appendChild(habitLabel);
   habitItem.appendChild(deleteHabitBtn);
@@ -339,7 +344,7 @@ prevDateBtn.addEventListener("click", () => {
 
   currentDate = newDate;
   displayDate(newDate);
-  displayHabits(newDate);
+  // displayHabits(newDate);
   sortDates();
   disableNextBtn();
   showHabitGraph(graphIndex);
@@ -354,7 +359,7 @@ nextDateBtn.addEventListener("click", () => {
 
   currentDate = newDate;
   displayDate(newDate);
-  displayHabits(newDate);
+  // displayHabits(newDate);
   sortDates();
   disableNextBtn();
   showHabitGraph(graphIndex);
@@ -375,8 +380,8 @@ dateDisplaying.addEventListener("change", () => {
   }
 
   currentDate = newDate;
-  displayHabits(newDate);
-  fillHabits();
+  // displayHabits(newDate);
+  // fillHabits();
   sortDates();
   disableNextBtn();
   showHabitGraph(graphIndex);
@@ -473,7 +478,12 @@ function calculateCurrentStreak() {
  */
 function showCurrentStreak(index) {
   if (habits.length === 0) {
-    displayStreak.innerHTML = `Current Streak:<br> N/A`;
+    displayStreak.innerHTML = `<div id="streak" class="tooltip">
+  <span class="tooltiptext">Current Streak: consecutive days you've completed all your habits.</span>
+  <img id= "streak-fire" src=""> 
+  <span id="streak-number" class="milestone">N/A</span>
+  </div>`;
+    quote.innerText = "";
     return;
   }
 
@@ -485,7 +495,7 @@ function showCurrentStreak(index) {
   </div>`;
 
   const streakNumber = document.getElementById("streak-number");
-  reachMilestone(currentStreak, streakNumber);
+  reachMilestone(currentStreak);
 }
 
 /**
@@ -703,13 +713,25 @@ function showDashboardNotes() {
 // Clicking on the info button will show/hide the habit graph info
 infoBtn.addEventListener("click", () => {
   if (dashboardNote.style.display === "none") {
-    dashboardNote.style.animation = "slideDown 0.5s ease-in-out forwards";
+    dashboardNote.style.animation = "slideDownShow 0.5s ease-in-out forwards";
     dashboardNote.style.display = "grid";
   } else {
-    dashboardNote.style.animation = "slideUp 0.5s ease-in-out forwards";
+    dashboardNote.style.animation = "slideUpGone 0.5s ease-in-out forwards";
     setTimeout(() => {
       dashboardNote.style.display = "none";
-    }, 750);
+    }, 500);
+  }
+});
+
+dateInfoBtn.addEventListener("click", () => {
+  if (habitListNote.style.display === "none") {
+    habitListNote.style.animation = "fadeIn 0.5s ease-in-out forwards";
+    habitListNote.style.display = "block";
+  } else {
+    habitListNote.style.animation = "fadeOut 0.5s ease-in-out forwards";
+    setTimeout(() => {
+      habitListNote.style.display = "none";
+    }, 500);
   }
 });
 
@@ -718,7 +740,7 @@ infoBtn.addEventListener("click", () => {
  */
 function initDaysTracked() {
   if (habits.length === 0) {
-    daysTracked.innerText = `Total days tracked: N/A days | Showing: N/A days`;
+    daysTracked.innerText = `Total days tracked: 0 days | Showing: 0 days`;
   }
 }
 
@@ -749,7 +771,11 @@ function highlightHabit(index) {
   }
 }
 
-function reachMilestone(num, object) {
+/**
+ * If it reaches a certain sreak number, a motivational quote will appear
+ * @param {integer} num whichever streak number it is on right now
+ */
+function reachMilestone(num) {
   let str = num.toString();
   quote.innerText = "";
   for (const [key, value] of Object.entries(milestoneQuotes)) {

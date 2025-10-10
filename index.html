@@ -28,7 +28,21 @@
 
     <div class="container">
       <div id="todays-habits">
+        <div class="info-row">
+          <div style="display: none" id="habit-list-note">
+            <div class="habit-note-style">
+              <p>
+                Adding or checking a habit on a past date fills in all days
+                between that date and today as uncompleted entries.
+              </p>
+            </div>
+          </div>
+        </div>
+
         <div class="date-container">
+          <button id="date-info-btn" title="Habit list info">
+            <i class="fa fa-info" aria-hidden="true"></i>
+          </button>
           <button id="prev-date-btn" title="prev">
             <i class="fa fa-arrow-left" aria-hidden="true"></i>
           </button>
@@ -70,13 +84,15 @@
             <div id="graph-btns"></div>
           </div>
           <ul class="squares"></ul>
-          <p id="days-tracked"></p>
+          <div id="graph-bottom">
+            <p id="days-tracked"></p>
+            <button id="info-btn" title="Habit graph info">
+              <i class="fa fa-info" aria-hidden="true"></i>
+            </button>
+          </div>
         </div>
 
-        <div id="info-row">
-          <button id="info-btn" title="Habit graph info">
-            <i class="fa fa-info" aria-hidden="true"></i>
-          </button>
+        <div class="info-row">
           <div style="display: none" id="dashboard-note"></div>
         </div>
       </div>
