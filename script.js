@@ -134,22 +134,10 @@ function displayHabits(date) {
   habitList.innerHTML = "";
   habits.forEach((h) => {
     let habit;
-    if (formatDate(date) in h["record"]) {
-      habit = createHabitCheckbox(
-        h["habit"],
-        h["habit"],
-        h["record"][formatDate(date)]
-      );
-    } else {
-      h["record"][formatDate(date)] = false;
-      sortDates();
-      localStorage.setItem("habits", JSON.stringify(habits));
-      habit = createHabitCheckbox(
-        h["habit"],
-        h["habit"],
-        h["record"][formatDate(date)]
-      );
-    }
+    const dateKey = formatDate(date);
+    const isChecked = h["record"][dateKey] || false;
+
+    habit = createHabitCheckbox(h["habit"], h["habit"], isChecked);
     habitList.appendChild(habit);
   });
 }
@@ -173,12 +161,12 @@ function createHabitCheckbox(id, name, isChecked = false) {
   habitCheckbox.classList.add("hover-effect");
 
   habitCheckbox.addEventListener("change", () => {
+    graphIndex = parseInt(habitCheckbox.id, 10);
     fillHabits();
     sortDates();
     updateHabits(habitCheckbox, currentDate);
     calculateCurrentStreak();
-    showHabitGraph(graphIndex);
-    showCurrentStreak(graphIndex);
+    init();
   });
 
   const habitLabel = document.createElement("label");
@@ -280,11 +268,11 @@ function fillHabits() {
 
   for (let i = 0; i < days; i++) {
     dateToAdd.setDate(dateToAdd.getDate() + 1);
-    habits.forEach((habit) => {
-      if (!(formatDate(dateToAdd) in habit.record)) {
-        habit["record"][formatDate(dateToAdd)] = false;
-      }
-    });
+    let habit = habits[graphIndex - 1];
+
+    if (!(formatDate(dateToAdd) in habit.record)) {
+      habit["record"][formatDate(dateToAdd)] = false;
+    }
   }
 
   sortDates();
@@ -344,7 +332,7 @@ prevDateBtn.addEventListener("click", () => {
 
   currentDate = newDate;
   displayDate(newDate);
-  // displayHabits(newDate);
+  displayHabits(newDate);
   sortDates();
   disableNextBtn();
   showHabitGraph(graphIndex);
@@ -359,7 +347,7 @@ nextDateBtn.addEventListener("click", () => {
 
   currentDate = newDate;
   displayDate(newDate);
-  // displayHabits(newDate);
+  displayHabits(newDate);
   sortDates();
   disableNextBtn();
   showHabitGraph(graphIndex);
@@ -380,7 +368,7 @@ dateDisplaying.addEventListener("change", () => {
   }
 
   currentDate = newDate;
-  // displayHabits(newDate);
+  displayHabits(newDate);
   // fillHabits();
   sortDates();
   disableNextBtn();
@@ -781,7 +769,51 @@ function reachMilestone(num) {
   for (const [key, value] of Object.entries(milestoneQuotes)) {
     if (str === key) {
       quote.innerText = value;
-      // object.style.animation = "pulse 0.5s ease-in-out";
     }
   }
 }
+
+// Give the webpage keyboard shortcuts
+document.addEventListener("keydown", function (event) {
+  const habitItems = habitList.getElementsByTagName("li");
+  const active = document.activeElement;
+
+  if (event.ctrlKey || event.metaKey || event.altKey) return;
+
+  switch (event.key) {
+    case "ArrowUp":
+      if (graphIndex > 1) {
+        graphIndex -= 1;
+      }
+      init();
+      break;
+
+    case "ArrowDown":
+      if (graphIndex < habits.length) {
+        graphIndex += 1;
+      }
+      init();
+      break;
+
+    case "ArrowLeft":
+      prevDateBtn.click();
+      break;
+
+    case "ArrowRight":
+      nextDateBtn.click();
+      break;
+
+    case "c":
+    case "C":
+      if (habits.length === 0 || !habitItems[graphIndex - 1]) return;
+
+      const checkbox = habitItems[graphIndex - 1].querySelector(
+        'input[type="checkbox"]'
+      );
+      if (checkbox) {
+        checkbox.checked = !checkbox.checked;
+        checkbox.dispatchEvent(new Event("change"));
+      }
+      break;
+  }
+});
