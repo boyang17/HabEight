@@ -4,7 +4,7 @@ A minimalist daily habit tracker that helps you build consistentcy with visual p
 
 ## Try It Out
 
-[Launch HabEight](https://boyang17.github.io/HabEight/)
+<a href="https://boyang17.github.io/HabEight/" target="_blank">Launch HabEight</a>
 
 ## Features
 
