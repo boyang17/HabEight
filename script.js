@@ -780,6 +780,13 @@ document.addEventListener("keydown", function (event) {
 
   if (event.ctrlKey || event.metaKey || event.altKey) return;
 
+  if (
+    active.tagName === "INPUT" ||
+    active.tagName === "TEXTAREA" ||
+    active.isContentEditable
+  )
+    return;
+
   switch (event.key) {
     case "ArrowUp":
       if (graphIndex > 1) {

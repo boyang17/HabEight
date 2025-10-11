@@ -474,7 +474,7 @@ ul {
 #habit-list-note {
   zoom: 0.55;
   gap: 0px;
-  margin: -20px;
+  margin: -30px;
   animation: none;
 }
 
@@ -484,7 +484,7 @@ ul {
   align-items: center;
   height: 0px;
   width: 550px;
-  margin-left: 40px;
+  margin-left: 60px;
 }
 
 
