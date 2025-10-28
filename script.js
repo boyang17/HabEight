@@ -260,13 +260,33 @@ function updateHabits(habitCheckbox, date) {
  */
 function fillHabits() {
   let dateToAdd = new Date(currentDate);
-  let days = Math.floor((today - currentDate) / (1000 * 60 * 60 * 24));
+  let daysToToday = Math.floor((today - currentDate) / (1000 * 60 * 60 * 24));
 
   if (habits.length === 0) {
     return;
   }
 
-  for (let i = 0; i < days; i++) {
+  sortDates();
+
+  for (let i = 0; i < daysToToday; i++) {
+    dateToAdd.setDate(dateToAdd.getDate() + 1);
+    let habit = habits[graphIndex - 1];
+
+    if (!(formatDate(dateToAdd) in habit.record)) {
+      habit["record"][formatDate(dateToAdd)] = false;
+    }
+  }
+
+  dateToAdd = new Date(
+    Object.keys(habits[graphIndex - 1]["record"])[
+      Object.keys(habits[graphIndex - 1]["record"]).length - 1
+    ]
+  );
+  let daysToEarliest = Math.floor(
+    (currentDate - dateToAdd) / (1000 * 60 * 60 * 24)
+  );
+
+  for (let i = 0; i < daysToEarliest; i++) {
     dateToAdd.setDate(dateToAdd.getDate() + 1);
     let habit = habits[graphIndex - 1];
 
