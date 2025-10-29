@@ -142,6 +142,11 @@ header a {
   transition: transform 0.2s ease-in-out;
 }
 
+#contact-icon {
+  font-size: 1.3rem;
+  transition: transform 0.2s ease-in-out;
+}
+
 #prev-date-btn:hover,
 #next-date-btn:hover,
 #delete-habit-btn:hover,
@@ -149,6 +154,7 @@ header a {
 #toggle-theme-btn:hover,
 #today-btn:hover,
 #github-icon:hover,
+#contact-icon:hover,
 #info-btn:hover,
 #date-info-btn:hover {
   transform: scale(1.1);
@@ -170,6 +176,7 @@ header a {
 #toggle-theme-btn:active,
 #today-btn:active,
 #github-icon:active,
+#contact-icon:active,
 #info-btn:active,
 #date-info-btn:active {
   transform: translateY(0.5px);
@@ -486,7 +493,6 @@ ul {
   width: 550px;
   margin-left: 60px;
 }
-
 
 #dashboard-note {
   zoom: 0.55;

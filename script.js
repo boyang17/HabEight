@@ -256,6 +256,7 @@ function updateHabits(habitCheckbox, date) {
 
 /**
  * It records the habits in between the select date and today
+ * and in between select date and the earliest recorded date
  * as not finished
  */
 function fillHabits() {
