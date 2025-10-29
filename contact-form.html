@@ -8,21 +8,41 @@
   </head>
   <body>
     <div class="contact-wrapper">
-      <h1>Send me a message</h1>
+      <h1>HabEight</h1>
+      <h2>Send me a message</h2>
       <p>no spam please</p>
-      <br>
-      <label for="user-name">Your Name</label>
-      <input type="text" name="user-name" id="user-name" />
-      <label for="user-email">Email</label>
-      <input type="text" name="user-email" id="user-email" />
-      <label for="user-message">Message</label>
-      <textarea
-        id="user-message"
-        name="user-message"
-        placeholder=""
-      ></textarea>
       <br />
-      <button>SEND YOUR MESSAGE</button>
+
+      <form onsubmit="sendMail(event)">
+        <label for="user-name">Your Name</label>
+        <input type="text" id="user-name" name="name" required />
+
+        <label for="user-email">Email</label>
+        <input type="email" id="user-email" name="email" required />
+
+        <label for="user-message">Message</label>
+        <textarea id="user-message" name="message" required></textarea>
+
+        <br />
+        <button type="submit">SEND YOUR MESSAGE</button>
+      </form>
     </div>
+
+    <script>
+      function sendMail(event) {
+        event.preventDefault();
+
+        const name = document.getElementById("user-name").value;
+        const email = document.getElementById("user-email").value;
+        const message = document.getElementById("user-message").value;
+
+        const subject = encodeURIComponent("New message from HabEight");
+        const body = encodeURIComponent(
+          `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`
+        );
+
+        window.location.href = `mailto:bruhyang17@gmail.com?subject=${subject}&body=${body}`;
+      }
+    </script>
   </body>
 </html>

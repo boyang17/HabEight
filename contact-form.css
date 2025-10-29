@@ -11,10 +11,10 @@ body {
   font-family: Arial, Helvetica, sans-serif;
   align-items: center;
   justify-content: center;
-  background-image: url("images/contact-form-background.png");
+  /* background-image: url("images/contact-form-background.png");
   background-size: cover;
   background-repeat: no-repeat;
-  background-position: center;
+  background-position: center; */
 }
 
 .contact-wrapper {
@@ -22,7 +22,7 @@ body {
   padding: 50px;
   border-radius: 15px;
   background-color: white;
-  box-shadow: 0 10px 16px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19) !important;
+  /* box-shadow: 0 10px 16px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19) !important; */
 }
 
 label {
@@ -74,14 +74,13 @@ button:active {
 
 @media (prefers-color-scheme: dark) {
   body {
-    background-image: url("images/contact-form-background-dark.jpg"); /* optional darker background */
+    /* background-image: url("images/contact-form-background-dark.jpg"); */
     color: #f1f1f1;
+    background-color: #191c1f;
   }
 
   .contact-wrapper {
     background-color: #191c1f;
-    box-shadow: 0 -10px 16px 0 rgba(0, 0, 0, 0.5),
-      0 -6px 20px 0 rgba(0, 0, 0, 0.4);
   }
 
   label {
