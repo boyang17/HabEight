@@ -781,17 +781,57 @@ function highlightHabit(index) {
 }
 
 /**
- * If it reaches a certain sreak number, a motivational quote will appear
+ * If it reaches a certain sreak number, a motivational quote will appear.
+ * Else, a random motivational quote from https://forismatic.com/en/ API will appear.
  * @param {integer} num whichever streak number it is on right now
  */
-function reachMilestone(num) {
+async function reachMilestone(num) {
   let str = num.toString();
   quote.innerText = "";
-  for (const [key, value] of Object.entries(milestoneQuotes)) {
-    if (str === key) {
-      quote.innerText = value;
-    }
+
+  if (milestoneQuotes[str]) {
+    quote.innerText = milestoneQuotes[str];
+    return;
   }
+
+  // This approach often leads to unwanted errors with the JSON parsing.
+  // try {
+  //   const url =
+  //     "https://api.allorigins.win/get?url=" +
+  //     encodeURIComponent(
+  //       "http://api.forismatic.com/api/1.0/?method=getQuote&lang=en&format=json"
+  //     ) +
+  //     `&_=${Date.now()}`;
+
+  //   const response = await fetch(url);
+  //   if (!response.ok) throw new Error("quote not found");
+
+  //   const data = await response.json();
+  //   const parsed = JSON.parse(data.contents);
+
+  //   const quoteText = parsed.quoteText || "";
+
+  //   quote.innerText = quoteText;
+  // } catch (error) {
+  //   console.error("Error fetching quote:", error);
+  //   quote.innerText = "";
+  // }
+
+  window.forismaticCallback = function (data) {
+    if (data && data.quoteText) {
+      quote.innerText = data.quoteText;
+    } else {
+      quote.innerText = "";
+    }
+  };
+
+  const script = document.createElement("script");
+  script.src = `http://api.forismatic.com/api/1.0/?method=getQuote&lang=en&format=jsonp&jsonp=forismaticCallback&_=${Date.now()}`;
+  document.body.appendChild(script);
+
+  script.onload = () => {
+    document.body.removeChild(script);
+  };
 }
 
 // Give the webpage keyboard shortcuts
