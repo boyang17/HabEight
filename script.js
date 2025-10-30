@@ -826,7 +826,7 @@ async function reachMilestone(num) {
   };
 
   const script = document.createElement("script");
-  script.src = `http://api.forismatic.com/api/1.0/?method=getQuote&lang=en&format=jsonp&jsonp=forismaticCallback&_=${Date.now()}`;
+  script.src = `https://api.forismatic.com/api/1.0/?method=getQuote&lang=en&format=jsonp&jsonp=forismaticCallback&_=${Date.now()}`;
   document.body.appendChild(script);
 
   script.onload = () => {
