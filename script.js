@@ -161,7 +161,7 @@ function createHabitCheckbox(id, name, isChecked = false) {
   habitCheckbox.classList.add("hover-effect");
 
   habitCheckbox.addEventListener("change", () => {
-    graphIndex = parseInt(habitCheckbox.id, 10);
+    graphIndex = habits.findIndex((h) => h.habit === habitCheckbox.id) + 1;
     fillHabits();
     sortDates();
     updateHabits(habitCheckbox, currentDate);
