@@ -260,40 +260,27 @@ function updateHabits(habitCheckbox, date) {
  * as not finished
  */
 function fillHabits() {
-  let dateToAdd = new Date(currentDate);
-  let daysToToday = Math.floor((today - currentDate) / (1000 * 60 * 60 * 24));
-
-  if (habits.length === 0) {
-    return;
-  }
+  if (habits.length === 0) return;
 
   sortDates();
 
-  for (let i = 0; i < daysToToday; i++) {
-    dateToAdd.setDate(dateToAdd.getDate() + 1);
-    let habit = habits[graphIndex - 1];
+  const habit = habits[graphIndex - 1];
+  const recordKeys = Object.keys(habit.record);
 
-    if (!(formatDate(dateToAdd) in habit.record)) {
-      habit["record"][formatDate(dateToAdd)] = false;
+  const [year, month, day] = recordKeys[recordKeys.length - 1]
+    .split("-")
+    .map(Number);
+  const earliestDate = new Date(year, month - 1, day);
+
+  let dateToAdd = new Date(earliestDate);
+  const totalDays = Math.floor((today - earliestDate) / (1000 * 60 * 60 * 24));
+
+  for (let i = 0; i <= totalDays; i++) {
+    const key = formatDate(dateToAdd);
+    if (!(key in habit.record)) {
+      habit.record[key] = false;
     }
-  }
-
-  dateToAdd = new Date(
-    Object.keys(habits[graphIndex - 1]["record"])[
-      Object.keys(habits[graphIndex - 1]["record"]).length - 1
-    ]
-  );
-  let daysToEarliest = Math.floor(
-    (currentDate - dateToAdd) / (1000 * 60 * 60 * 24)
-  );
-
-  for (let i = 0; i < daysToEarliest; i++) {
     dateToAdd.setDate(dateToAdd.getDate() + 1);
-    let habit = habits[graphIndex - 1];
-
-    if (!(formatDate(dateToAdd) in habit.record)) {
-      habit["record"][formatDate(dateToAdd)] = false;
-    }
   }
 
   sortDates();
@@ -303,7 +290,10 @@ function fillHabits() {
 // Add a click listener to add a habit to "currentDate" and all the habit in between the "currentDate" and "today"
 // and redisplay the habits with the newly added
 addHabitBtn.addEventListener("click", () => {
-  addHabit(currentDate);
+  const added = addHabit(currentDate);
+  if (!added) return;
+
+  graphIndex = habits.length;
   fillHabits();
   sortDates();
   displayHabits(currentDate);
@@ -326,14 +316,14 @@ function addHabit(date) {
 
   if (!inputHabit) {
     showSnackbar("Please enter a habit!");
-    return;
+    return false;
   }
 
   let alreadyExists = habits.some((h) => h.habit === inputHabit);
 
   if (alreadyExists) {
     showSnackbar("Cannot add repeated habit!");
-    return;
+    return false;
   }
 
   let habit = {
@@ -345,6 +335,7 @@ function addHabit(date) {
   habits.push(habit);
   localStorage.setItem("habits", JSON.stringify(habits));
   habitToAdd.value = "";
+  return true;
 }
 
 // Adds a click listner so the user can go to the previous date
@@ -588,7 +579,7 @@ function showHabitGraph(habitIndex) {
     }
     squares.insertAdjacentHTML(
       "beforeend",
-      `<li id="date-square-${i}" data-level="${level}" title="${dates[i]}"></li>`
+      `<li id="date-square-${i}" data-level="${level}" title="${dates[i]}"></li>`,
     );
 
     const dateSqaure = document.getElementById(`date-square-${i}`);
@@ -771,11 +762,11 @@ function highlightHabit(index) {
 
   if (document.body.classList.contains("dark")) {
     habitItems[index - 1].getElementsByTagName(
-      "label"
+      "label",
     )[0].style.backgroundColor = "rgba(135, 206, 235, 0.8)";
   } else {
     habitItems[index - 1].getElementsByTagName(
-      "label"
+      "label",
     )[0].style.backgroundColor = "rgba(255, 255, 150, 0.8)";
   }
 }
@@ -876,7 +867,7 @@ document.addEventListener("keydown", function (event) {
       if (habits.length === 0 || !habitItems[graphIndex - 1]) return;
 
       const checkbox = habitItems[graphIndex - 1].querySelector(
-        'input[type="checkbox"]'
+        'input[type="checkbox"]',
       );
       if (checkbox) {
         checkbox.checked = !checkbox.checked;
